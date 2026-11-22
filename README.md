@@ -94,7 +94,7 @@ hand, or a mod on its own.
   on when the other key is released or after the 200 ms tapping term (Vial's QMK Settings owns the
   per-key hold callbacks, so the thumbs cannot turn on at the press).
 - "Typing key" differs a little. With ZMK it is any non-modifier key press (mods and layer keys do
-  not count). With Vial it is a letter, `.` `,` `;`
+  not count). With Vial (Silakka54) it is a letter, `.` `,` `;`
   `/`, a plain `Space` or a tapped `Space`/Nav, with no Cmd, Ctrl or left Alt held (QMK's default rule).
 - The ZMK combos use the same 150 ms idle rule, so fast rolls such as `bl` type letters, not
   Esc. Vial combos have no idle rule.
