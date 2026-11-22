@@ -14,8 +14,9 @@
 #define BOOTMAGIC_COLUMN_RIGHT 0
 
 // Defaults for Vial's QMK Settings after an EEPROM reset; they match
-// silakka54-graphite.vil. Loading the .vil also sets permissive hold, chordal
-// hold and Flow Tap (150 ms), which Vial resets to off.
+// silakka54-graphite.vil. Loading the .vil also sets permissive hold and
+// chordal hold, which Vial resets to off. Flow Tap stays off, as on the Corne:
+// it turned home-row Shift into a letter right after typing.
 #define TAPPING_TERM 200
 #define COMBO_TERM 50
 #define COMBO_SHOULD_TRIGGER // base layer only, see keymap.c

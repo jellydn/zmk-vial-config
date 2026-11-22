@@ -60,8 +60,8 @@ do instead:
 2. **Mod as soon as another key is tapped.** Hold a mod, then press *and release* another key:
    the mod applies at once, without waiting for the tapping term.
 3. **Letter at once while typing.** A home-row key pressed within 150 ms after a typing key is
-   a letter at once. This removes the typing delay and most misfires on fast rolls. Not on the
-   Corne: there it blocked home-row Shift right after a letter (see below).
+   a letter at once. This removes the typing delay and most misfires on fast rolls. ZMK only:
+   the Vial builds have it off, because it blocked home-row Shift right after a letter (see below).
 4. **Other hand only.** The mod applies only when the next key is on the other hand or a thumb,
    so same-hand rolls such as `rt` in "start" stay letters.
 5. **Same-hand mods still stack.** The hand check waits for the next key's *release*, so
@@ -74,16 +74,14 @@ hand, or a mod on its own.
 | ------------------------- | ------------------------------------- | ---------------------------------------- |
 | 1. Tapping term           | 280 ms                                | 200 ms                                   |
 | 2. Mod on another tap     | `flavor = "balanced"`                 | Permissive Hold: on                      |
-| 3. Letter while typing    | `require-prior-idle-ms = <150>`       | Silakka54: Flow Tap 150 ms (home-row mods only). Corne: Flow Tap off |
+| 3. Letter while typing    | `require-prior-idle-ms = <150>`       | Flow Tap: off                            |
 | 4. Other hand only        | `hold-trigger-key-positions`: other hand, all thumbs (and the other number row) | Chordal Hold: on |
 | 5. Same-hand mods stack   | `hold-trigger-on-release`             | Chordal Hold: a run of same-hand mods followed by an other-hand key all become mods |
 | Quick tap (tap, then hold to repeat) | 200 ms                     | 200 ms                                   |
 
 - Step 3 covers only the home-row mods. The thumb layer-taps never resolve early as a tap, so you
-  can hold `Space` for Nav right after a letter. In the Silakka54 Vial build, Flow Tap would also
-  catch `Space`/Nav, so its `keymap.c` limits it with `is_flow_tap_key`. A tapped `Space` still
-  counts as typing before a home-row mod.
-- The Corne has Flow Tap off, as in the original Vial setup
+  can hold `Space` for Nav right after a letter.
+- Both Vial builds have Flow Tap off, as in the original Corne Vial setup
   ([graphite.vil](https://github.com/jellydn/dotfiles/blob/master/mics/corne/graphite.vil)). With
   it on, `S`/`H` pressed within 150 ms of a letter typed a letter, so Shift needed a pause first.
   Without it, a fast roll that nests an other-hand key inside a home-row key can give a stray mod;
@@ -93,9 +91,6 @@ hand, or a mod on its own.
   mods), and a home-row mod plus any thumb key is a chord, as on the Silakka54. A thumb layer turns
   on when the other key is released or after the 200 ms tapping term (Vial's QMK Settings owns the
   per-key hold callbacks, so the thumbs cannot turn on at the press).
-- "Typing key" differs a little. With ZMK it is any non-modifier key press (mods and layer keys do
-  not count). With Vial (Silakka54) it is a letter, `.` `,` `;`
-  `/`, a plain `Space` or a tapped `Space`/Nav, with no Cmd, Ctrl or left Alt held (QMK's default rule).
 - The ZMK combos use the same 150 ms idle rule, so fast rolls such as `bl` type letters, not
   Esc. Vial combos have no idle rule.
 - Vial resets Permissive Hold, Chordal Hold and Flow Tap to off on every new build. Load the `.vil`
@@ -186,9 +181,9 @@ A Vial build of the same layout, next to the ZMK one:
 
 As on the Corne, the `.vil` is the single source of truth for combos, key overrides, macro M0 and
 QMK Settings, and Vial erases them on the first boot of every new build. **Load the `.vil` after
-every flash.** `keymap.c` matches the `.vil` layers key for key and only adds two things Vial cannot
-store: combos fire on the base layer only, and Flow Tap covers the home-row mods only (see
-[Home-row mods](#home-row-mods)). The board has no LEDs to set. There is no Leader or
+every flash.** `keymap.c` matches the `.vil` layers key for key and only adds one thing Vial cannot
+store: combos fire on the base layer only. Flow Tap is off, as on the Corne (see
+[Home-row mods](#home-row-mods)); an older `.vil` still sets it to 150 ms. The board has no LEDs to set. There is no Leader or
 bootloader key; enter the bootloader with the buttons or bootmagic.
 
 ## Build
