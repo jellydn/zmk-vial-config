@@ -68,44 +68,6 @@ bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode
     return get_highest_layer(layer_state) == _BASE;
 }
 
-// Flow Tap (150 ms in the .vil) turns a home-row mod into a tap when it follows
-// a typing key within the term, like require-prior-idle-ms on the Silakka54.
-// Vial asks is_flow_tap_key about both keys: the tap-hold key being decided and
-// the key before it, which QMK records only when it was tapped. Space/Nav counts
-// as the key before, but is never forced to a tap itself, so holding it for Nav
-// right after a letter still works (ZMK's layer-taps have no idle rule either).
-// It is the key being decided exactly while it is held down.
-static bool space_nav_held;
-
-bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (keycode == LT(_NAV, KC_SPC)) {
-        space_nav_held = record->event.pressed;
-    }
-    return true;
-}
-
-bool is_flow_tap_key(uint16_t keycode) {
-    if ((get_mods() & (MOD_MASK_CG | MOD_BIT_LALT)) != 0) {
-        return false; // a hotkey, not typing (QMK's default rule)
-    }
-    if (keycode == LT(_NAV, KC_SPC)) {
-        return !space_nav_held;
-    }
-    if (IS_QK_LAYER_TAP(keycode)) {
-        return false;
-    }
-    switch (get_tap_keycode(keycode)) {
-        case KC_SPC: // plain Space, e.g. on the Fn layer
-        case KC_A ... KC_Z:
-        case KC_DOT:
-        case KC_COMM:
-        case KC_SCLN:
-        case KC_SLSH:
-            return true;
-    }
-    return false;
-}
-
 // Chordal Hold (on in the .vil) makes a tap-hold key a tap when the next key is
 // on the same hand. The thumb layer-taps count as neither hand, so they turn
 // their layer on also with keys on their own hand (Esc and the mods on Nav and
@@ -170,13 +132,11 @@ static const uint8_t default_macros[] PROGMEM = {
 // Written with qmk_settings_set, as Vial does when it loads the .vil, so they
 // show in Vial's QMK Settings tab and can still be changed there.
 static void write_default_qmk_settings(void) {
-    const uint8_t  on              = 1;
-    const uint16_t tap_code_delay  = 0;   // QSID 18, reset default 10 ms
-    const uint16_t flow_tap_term   = 150; // QSID 27, reset default 0 (off)
+    const uint8_t  on             = 1;
+    const uint16_t tap_code_delay = 0; // QSID 18, reset default 10 ms
     qmk_settings_set(18, &tap_code_delay, sizeof(tap_code_delay));
     qmk_settings_set(22, &on, sizeof(on)); // Permissive Hold
     qmk_settings_set(26, &on, sizeof(on)); // Chordal Hold
-    qmk_settings_set(27, &flow_tap_term, sizeof(flow_tap_term));
 }
 
 // Detect the first boot of a new build, before Vial resets its EEPROM.

@@ -60,7 +60,8 @@ do instead:
 2. **Mod as soon as another key is tapped.** Hold a mod, then press *and release* another key:
    the mod applies at once, without waiting for the tapping term.
 3. **Letter at once while typing.** A home-row key pressed within 150 ms after a typing key is
-   a letter at once. This removes the typing delay and most misfires on fast rolls.
+   a letter at once. This removes the typing delay and most misfires on fast rolls. Not on the
+   Corne: there it blocked home-row Shift right after a letter (see below).
 4. **Other hand only.** The mod applies only when the next key is on the other hand or a thumb,
    so same-hand rolls such as `rt` in "start" stay letters.
 5. **Same-hand mods still stack.** The hand check waits for the next key's *release*, so
@@ -73,15 +74,20 @@ hand, or a mod on its own.
 | ------------------------- | ------------------------------------- | ---------------------------------------- |
 | 1. Tapping term           | 280 ms                                | 200 ms                                   |
 | 2. Mod on another tap     | `flavor = "balanced"`                 | Permissive Hold: on                      |
-| 3. Letter while typing    | `require-prior-idle-ms = <150>`       | Flow Tap: 150 ms (home-row mods only)    |
+| 3. Letter while typing    | `require-prior-idle-ms = <150>`       | Silakka54: Flow Tap 150 ms (home-row mods only). Corne: Flow Tap off |
 | 4. Other hand only        | `hold-trigger-key-positions`: other hand, all thumbs (and the other number row) | Chordal Hold: on |
 | 5. Same-hand mods stack   | `hold-trigger-on-release`             | Chordal Hold: a run of same-hand mods followed by an other-hand key all become mods |
 | Quick tap (tap, then hold to repeat) | 200 ms                     | 200 ms                                   |
 
-- Step 3 covers only the home-row mods on both boards. The thumb layer-taps never resolve early as
-  a tap, so you can hold `Space` for Nav right after a letter. In the Vial builds, Flow Tap would
-  also catch `Space`/Nav, so each `keymap.c` limits it with `is_flow_tap_key`. A tapped `Space` still
+- Step 3 covers only the home-row mods. The thumb layer-taps never resolve early as a tap, so you
+  can hold `Space` for Nav right after a letter. In the Silakka54 Vial build, Flow Tap would also
+  catch `Space`/Nav, so its `keymap.c` limits it with `is_flow_tap_key`. A tapped `Space` still
   counts as typing before a home-row mod.
+- The Corne has Flow Tap off, as in the original Vial setup
+  ([graphite.vil](https://github.com/jellydn/dotfiles/blob/master/mics/corne/graphite.vil)). With
+  it on, `S`/`H` pressed within 150 ms of a letter typed a letter, so Shift needed a pause first.
+  Without it, a fast roll that nests an other-hand key inside a home-row key can give a stray mod;
+  Chordal Hold still keeps same-hand rolls as letters.
 - On the Corne, Chordal Hold counts the thumb layer-taps as neither hand (`chordal_hold_handedness`
   in `keymap.c`). So holding `Space` for Nav works with Nav keys on the same hand (Esc, the left
   mods), and a home-row mod plus any thumb key is a chord, as on the Silakka54. A thumb layer turns
@@ -103,8 +109,8 @@ Tap-Hold**).
 | Setting | What it does | Why / trade-off | Example |
 | --- | --- | --- | --- |
 | Tapping term 200 ms | A key held longer than this on its own is a hold. | Fallback only; the rules below decide most presses sooner. Shorter means faster mods but more stray mods. | Rest on `S` 250 ms → Shift. |
-| Permissive Hold | Another key pressed *and released* inside a held key makes it a hold at once. | Fast shortcuts (ZMK `balanced`). A sloppy roll can give a mod; Flow Tap and Chordal Hold catch most. | `T`↓ `C`↓ `C`↑ → Ctrl+C. |
-| Flow Tap 150 ms | A home-row mod pressed within 150 ms of a typing key is a letter at once. | No typing delay (ZMK `require-prior-idle-ms`). Pause briefly before a mod right after a letter. Thumb layer-taps are excluded. | Fast `the` → letters, no mods. |
+| Permissive Hold | Another key pressed *and released* inside a held key makes it a hold at once. | Fast shortcuts (ZMK `balanced`). A sloppy other-hand roll can give a mod; Chordal Hold catches same-hand rolls. | `T`↓ `C`↓ `C`↑ → Ctrl+C. |
+| Flow Tap off | Home-row mods are decided by the rules above, also right after a letter. | As in the original `.vil`. At 150 ms, `S`/`H` right after a letter gave a letter, not Shift. | `e`, then `S`↓ `O`↓ `O`↑ → `O`. |
 | Chordal Hold | A hold needs the next key on the *other* hand. | Same-hand rolls stay letters. A same-hand mod needs the full 200 ms. Thumb layer-taps count as neither hand, so Nav keys on the thumb's own hand work. | `S` `T` (same hand) → `st`. |
 | Combo term 50 ms | Combo keys must go down within 50 ms. | Chords fire, rolls type. Vial has no idle rule, so a very fast `bl` can still give Esc. | `B`+`L` together → Esc. |
 | Base-layer combos | Combos fire only on the base layer (`combo_should_trigger`). | Stops `.` `-` on Num from firing sticky Meh. | — |
@@ -148,16 +154,20 @@ extra keys, then includes `base.keymap`. Combos and HRM trigger keys use the
 The extra keys hold ←/→ (EX1) and Play/Pause / Next Track (EX2). The `.vil` is the single source of truth for
 combos, key overrides, macro M0 and QMK Settings: Vial keeps them in EEPROM, not in `keymap.c`, and
 erases them on the first boot of every new build; the firmware then writes the `.vil` values back. The firmware
-itself only adds what Vial cannot store: combos fire on the base layer only, Flow Tap covers the
-home-row mods only, Chordal Hold counts the thumb layer-taps as neither hand, and the LEDs start on
-Typing Heatmap. On that first boot it also writes the `.vil` combos, Graphite shift overrides,
-macro M0 and QMK Settings (Permissive Hold, Chordal Hold, Flow Tap 150 ms, tap code delay 0) back,
+itself only adds what Vial cannot store: combos fire on the base layer only, Chordal Hold counts
+the thumb layer-taps as neither hand, and the LEDs start on Typing Heatmap. On that first boot it
+also writes the `.vil` combos, Graphite shift overrides, macro M0 and QMK Settings (Permissive Hold,
+Chordal Hold, tap code delay 0; Flow Tap stays off) back,
 so they work before you load the `.vil` (`default_combos`, `default_key_overrides`,
 `default_macros` and `write_default_qmk_settings` in `keymap.c`; keep them in sync with the `.vil`).
 
 Tested on hardware (2026-11-21): the firmware from `main` with `corne-v4.1-graphite.vil` loaded.
 Holding a thumb key for its layer right after typing works, and the combos, Graphite shift overrides
 and macro M0 work straight after a flash.
+
+> [!NOTE]
+> Flow Tap off on the Corne (home-row Shift right after a letter) is not yet tested on hardware.
+> After you flash, load the new `.vil` too: an older copy still sets Flow Tap to 150 ms.
 
 ## Silakka54 (QMK/Vial)
 

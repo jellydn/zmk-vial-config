@@ -6,8 +6,9 @@
 #define VIAL_UNLOCK_COMBO_COLS {0, 1}
 
 // Defaults for Vial's QMK Settings after an EEPROM reset; they match
-// corne-v4.1-graphite.vil. Loading the .vil also sets permissive hold, chordal
-// hold and Flow Tap (150 ms), which Vial resets to off.
+// corne-v4.1-graphite.vil. Loading the .vil also sets permissive hold and
+// chordal hold, which Vial resets to off. Flow Tap stays off, as in the original
+// dotfiles .vil: it turned home-row Shift into a letter right after typing.
 #define TAPPING_TERM 200
 #define COMBO_TERM 50
 #define COMBO_SHOULD_TRIGGER // base layer only, see keymap.c
