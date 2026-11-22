@@ -23,7 +23,7 @@ Miryoku-style thumb layers.
 ## Keymap
 
 - **Base**: Graphite with home-row mods `Gui Alt Ctrl Shift` on `N R T S` and the mirror,
-  `Shift Ctrl Alt Gui`, on `H A E I`. They use urob's "timeless" setup; see
+  `Shift Ctrl Alt Gui`, on `H A E I`. They use urob's "timeless" setup without its idle rule; see
   [Home-row mods](#home-row-mods) and the [FAQ](#faq-tap-hold-settings).
 - **Thumbs** (left to right): `=`, `Space`/Nav, `Tab`/Mouse, `Enter`/Sym, `Bksp`/Num, `;`.
 - **Layers**: Nav (arrows, Home/End, PgUp/PgDn), Mouse (mouse keys, Cmd shortcuts, one-shot Fn),
@@ -54,14 +54,15 @@ Miryoku-style thumb layers.
 Plain home-row mods decide by time: hold past the tapping term for a mod, release before it for a
 letter. Fast rolls then give stray mods, and slow letters give stray taps. urob's
 ["timeless" setup](https://github.com/urob/zmk-config#timeless-homerow-mods) decides by what you
-do instead:
+do instead. This repo uses steps 2, 4 and 5 on every board; steps 1 and 3 are urob's, left out here:
 
-1. **Long tapping term.** Holding a letter a bit too long does not give a mod.
+1. **Long tapping term** (urob: 280 ms; here 200 ms). Holding a letter a bit too long does not give
+   a mod.
 2. **Mod as soon as another key is tapped.** Hold a mod, then press *and release* another key:
    the mod applies at once, without waiting for the tapping term.
-3. **Letter at once while typing.** A home-row key pressed within 150 ms after a typing key is
-   a letter at once. This removes the typing delay and most misfires on fast rolls. ZMK only:
-   the Vial builds have it off, because it blocked home-row Shift right after a letter (see below).
+3. **Letter at once while typing** (urob: 150 ms; here off). A home-row key pressed within 150 ms
+   after a typing key is a letter at once. It removes most misfires on fast rolls, but it also
+   blocked home-row Shift right after a letter (see below).
 4. **Other hand only.** The mod applies only when the next key is on the other hand or a thumb,
    so same-hand rolls such as `rt` in "start" stay letters.
 5. **Same-hand mods still stack.** The hand check waits for the next key's *release*, so
@@ -72,20 +73,19 @@ hand, or a mod on its own.
 
 | Step                      | Silakka54 (ZMK, `config/base.keymap`) | Corne and Silakka54 Vial (QMK Settings in the `.vil`) |
 | ------------------------- | ------------------------------------- | ---------------------------------------- |
-| 1. Tapping term           | 280 ms                                | 200 ms                                   |
+| 1. Tapping term           | 200 ms                                | 200 ms                                   |
 | 2. Mod on another tap     | `flavor = "balanced"`                 | Permissive Hold: on                      |
-| 3. Letter while typing    | `require-prior-idle-ms = <150>`       | Flow Tap: off                            |
+| 3. Letter while typing    | off (no `require-prior-idle-ms`)      | Flow Tap: off                            |
 | 4. Other hand only        | `hold-trigger-key-positions`: other hand, all thumbs (and the other number row) | Chordal Hold: on |
 | 5. Same-hand mods stack   | `hold-trigger-on-release`             | Chordal Hold: a run of same-hand mods followed by an other-hand key all become mods |
 | Quick tap (tap, then hold to repeat) | 200 ms                     | 200 ms                                   |
 
-- Step 3 covers only the home-row mods. The thumb layer-taps never resolve early as a tap, so you
-  can hold `Space` for Nav right after a letter.
-- Both Vial builds have Flow Tap off, as in the original Corne Vial setup
+- All builds have step 3 off, as in the original Corne Vial setup
   ([graphite.vil](https://github.com/jellydn/dotfiles/blob/master/mics/corne/graphite.vil)). With
-  it on, `S`/`H` pressed within 150 ms of a letter typed a letter, so Shift needed a pause first.
-  Without it, a fast roll that nests an other-hand key inside a home-row key can give a stray mod;
-  Chordal Hold still keeps same-hand rolls as letters.
+  it on (Vial Flow Tap or ZMK `require-prior-idle-ms`, both 150 ms), `S`/`H` pressed right after a
+  letter typed a letter, so Shift needed a pause first; on the ZMK Silakka54 this showed on
+  hardware too. Without it, a fast roll that nests an other-hand key inside a home-row key can give
+  a stray mod; the other-hand rule still keeps same-hand rolls as letters.
 - On the Corne, Chordal Hold counts the thumb layer-taps as neither hand (`chordal_hold_handedness`
   in `keymap.c`). So holding `Space` for Nav works with Nav keys on the same hand (Esc, the left
   mods), and a home-row mod plus any thumb key is a chord, as on the Silakka54. A thumb layer turns
@@ -115,10 +115,11 @@ Tap-Hold**).
 QMK Settings owns "hold on other key press" for all keys, so `keymap.c` cannot turn it on for the
 thumbs only (PR #9). Turning it on globally in Vial would also give stray home-row mods.
 
-**Silakka54 (ZMK):** urob's timeless setup does the same with ZMK names: `balanced` (Permissive
-Hold), `require-prior-idle-ms = <150>` (Flow Tap), `hold-trigger-key-positions` on the other hand and
-all thumbs plus `hold-trigger-on-release` (Chordal Hold). Its term is 280 ms, any non-modifier key
-counts as typing, and its combos also have a 150 ms idle rule.
+**Silakka54 (ZMK):** the home-row mods now match Vial, with ZMK names: a 200 ms term, `balanced`
+(Permissive Hold), `hold-trigger-key-positions` on the other hand and all thumbs plus
+`hold-trigger-on-release` (Chordal Hold), and no `require-prior-idle-ms` (Flow Tap off). urob's
+upstream 280 ms term and 150 ms idle rule made home-row Shift wait after a letter. The ZMK combos
+keep their own 150 ms idle rule.
 
 ## Layout of the repo
 
