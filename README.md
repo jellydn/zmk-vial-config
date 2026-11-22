@@ -260,10 +260,10 @@ cable into that half.
 
 1. In the Actions tab, filter `Build Silakka54 Vial firmware` by your branch (`main` once merged),
    open the green run for the commit you want, and download the `silakka54-vial` artifact. It holds
-   `silakka54_jellydn.uf2` and `silakka54-graphite.vil`. Both halves use the same `.uf2`.
+   `silakka54-vial.uf2` and `silakka54-graphite.vil`. Both halves use the same `.uf2`.
 2. Unplug the USB cable, then unplug the TRRS cable between the halves.
 3. Left half: hold BOOT (or the outer top key) and plug the USB cable into the left half, then let
-   go. A drive named `RPI-RP2` opens. Copy `silakka54_jellydn.uf2` to it; the drive closes by
+   go. A drive named `RPI-RP2` opens. Copy `silakka54-vial.uf2` to it; the drive closes by
    itself when the flash is done.
 4. Unplug the USB cable. Do step 3 on the right half with the same file.
 5. With the USB cable unplugged, connect the TRRS cable.

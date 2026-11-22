@@ -52,11 +52,14 @@ jobs:
         run: qmk compile -kb silakka54 -km jellydn
 
       # qmk compile also copies the .uf2 to the vial-qmk root; upload-artifact
-      # skips the hidden .build/ folder. One .uf2 for both halves.
+      # skips the hidden .build/ folder. One .uf2 for both halves. QMK names it
+      # after the keymap (silakka54_jellydn), so give it the same style of name
+      # as the Corne (corne-v4.1-vial.uf2).
       - name: Collect firmware
         run: |
           mkdir firmware
-          cp vial-qmk/*.uf2 qmk/silakka54-graphite.vil firmware/
+          cp vial-qmk/silakka54_jellydn.uf2 firmware/silakka54-vial.uf2
+          cp qmk/silakka54-graphite.vil firmware/
 
       - uses: actions/upload-artifact@v7
         with:
