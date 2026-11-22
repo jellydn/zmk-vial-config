@@ -50,7 +50,7 @@ share one layout:
 **ZMK build:**
 1. `build.yaml` matrix → reusable `urob/zmk-actions` workflow → west fetches `config/west.yml` pins.
 2. Zephyr builds `zmk/app` with `-DZMK_CONFIG=config -DSHIELD=silakka54_left|right`.
-3. Output: `silakka54_left-rpi_pico__zmk-zmk.uf2`, `silakka54_right-…uf2` (artifact `firmware`).
+3. Output: `silakka54-zmk-left.uf2`, `silakka54-zmk-right.uf2` (artifact `firmware`).
 
 **Vial build:**
 1. Check out vial-qmk (and kbd_firmware for the Corne) at pinned SHAs.

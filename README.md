@@ -229,13 +229,13 @@ just restarts that half.
 
 1. In the Actions tab, filter `Build ZMK firmware (nix)` by your branch (`main` once merged), open
    the green run for the commit you want, and download the `firmware` artifact. It holds
-   `silakka54_left-rpi_pico__zmk-zmk.uf2` and `silakka54_right-rpi_pico__zmk-zmk.uf2`.
+   `silakka54-zmk-left.uf2` and `silakka54-zmk-right.uf2`.
 2. Unplug the USB cable, then unplug the TRRS cable between the halves.
 3. Left half: hold BOOT and plug the USB cable into the left half, then let go of BOOT. If it is
    already plugged in, hold BOOT, press RESET, then let go of BOOT.
-4. A drive named `RPI-RP2` opens. Copy `silakka54_left-…uf2` to it. The drive closes by itself when
+4. A drive named `RPI-RP2` opens. Copy `silakka54-zmk-left.uf2` to it. The drive closes by itself when
    the flash is done.
-5. Unplug the USB cable. Do steps 3 and 4 on the right half with `silakka54_right-…uf2`.
+5. Unplug the USB cable. Do steps 3 and 4 on the right half with `silakka54-zmk-right.uf2`.
 6. With the USB cable unplugged, connect the TRRS cable.
 7. Plug the USB cable into the **left** half. The left half is the central; the right half gets
    power and sends its keys through the TRRS cable.
