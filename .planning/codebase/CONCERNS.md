@@ -92,7 +92,8 @@ These change keymap behavior, so they need the owner's decision.
 
 ## Test Coverage Gaps
 
-**Keymap behavior:** only hardware testing. Vial builds are UNTESTED on hardware (README).
+**Keymap behavior:** only hardware testing, and no build's current settings are tested yet (README
+"Test status").
 Priority: Medium.
 
 ---

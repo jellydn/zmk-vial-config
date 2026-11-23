@@ -7,9 +7,9 @@
 **Overall:** Declarative keyboard firmware configuration with three parallel firmware targets that
 share one layout:
 
-1. Silakka54 on ZMK (`config/`) - the main, hardware-tested build.
+1. Silakka54 on ZMK (`config/`) - the main build (current settings untested; see README "Test status").
 2. Corne v4.1 on foostan's stock Vial firmware + `qmk/corne-v4.1-graphite.vil` (no firmware here).
-3. Silakka54 on QMK/Vial (`qmk/silakka54/` + `qmk/silakka54-graphite.vil`), untested.
+3. Silakka54 on QMK/Vial (`qmk/silakka54/` + `qmk/silakka54-graphite.vil`), never tested on hardware.
 
 **Key Characteristics:**
 - The layout is written by hand twice (ZMK devicetree, the Silakka54 `keymap.c`), plus two `.vil`

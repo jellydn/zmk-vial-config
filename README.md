@@ -17,8 +17,8 @@ plus `corne-v4.1-graphite.vil`; see [Corne v4.1](#corne-v41-qmkvial).
 
 | Keyboard  | Status    | Build target                             | Notes                                       |
 | --------- | --------- | ---------------------------------------- | ------------------------------------------- |
-| Silakka54 | supported | `rpi_pico//zmk` + `silakka54_left/right` | Onboard RP2040, full-duplex wired split     |
-| Corne v4.1 | Vial (stock) | foostan's `crkbd_rev4_1_standard_vial.uf2` + `qmk/corne-v4.1-graphite.vil` | ZMK lacks single-wire (half-duplex) split on RP2040, so it runs Vial |
+| Silakka54 | supported (current settings untested, see [Test status](#test-status)) | `rpi_pico//zmk` + `silakka54_left/right` | Onboard RP2040, full-duplex wired split     |
+| Corne v4.1 | Vial (stock, untested) | foostan's `crkbd_rev4_1_standard_vial.uf2` + `qmk/corne-v4.1-graphite.vil` | ZMK lacks single-wire (half-duplex) split on RP2040, so it runs Vial |
 | Silakka54 | QMK/Vial (untested) | `silakka54` (see `qmk/silakka54/`) | Same layout as the ZMK build, for Vial users |
 
 ## Keymap
@@ -190,6 +190,32 @@ every flash.** `keymap.c` matches the `.vil` layers key for key and only adds on
 store: combos fire on the base layer only. Flow Tap is off, as on the Corne (see
 [Home-row mods](#home-row-mods)); an older `.vil` still sets it to 150 ms. The board has no LEDs to set. There is no Leader or
 bootloader key; enter the bootloader with the buttons or bootmagic.
+
+## Test status
+
+Hardware tests are done by hand; CI only checks that each firmware builds. Status on 2026-11-23:
+
+| Build | Firmware file | Current settings | Tested on hardware | Untested |
+| --- | --- | --- | --- | --- |
+| Silakka54 ZMK | `silakka54-zmk-left.uf2`, `silakka54-zmk-right.uf2` (release) | Home-row mods: 200 ms, `balanced`, other-hand hold-trigger on release, quick tap 200 ms, no `require-prior-idle-ms` (PR #18). Combos: 50 ms, 150 ms idle. Leader `B O O T` / `R E S E T` (PR #4) | 2026-11-22, firmware with urob's 280 ms term and 150 ms idle rule (before PR #18): it types, and home-row Shift waits after a letter (the reason for PR #18) | Everything with the PR #18 settings. The Leader key (PR #4 left its hardware checks open) |
+| Silakka54 Vial | `silakka54-vial.uf2` + `silakka54-graphite.vil` | 200 ms, Permissive Hold, Chordal Hold, Flow Tap off (PR #17), quick tap 200 ms; combos 50 ms, base layer only | Nothing | Everything, also flashing and both halves working |
+| Corne v4.1 | foostan's [`crkbd_rev4_1_standard_vial.uf2`](https://github.com/foostan/kbd_firmware/raw/7e94242f7474761609d7ec16df0872a9785c2ccb/keyboards/crkbd/vial-kb/vial-qmk/.build/crkbd_rev4_1_standard_vial.uf2) + `corne-v4.1-graphite.vil` | The same QMK Settings as the Silakka54 Vial `.vil` and the dotfiles `.vil`; combos on every layer; thumbs count as their own hand | Only the old custom firmware (2026-11-21, from `main`, Flow Tap 150 ms): `Space` for Nav after typing, combos, Graphite shift overrides and M0 worked. Later its home-row Shift waited after a letter (fixed by Flow Tap off, PR #16) | Everything on the stock firmware (PR #21) |
+
+**Checklist after a flash** (load the `.vil` first on Vial builds):
+
+1. **Home-row Shift right after a letter:** type `e`, then at once hold `S` and tap `o` → `O`. Do the
+   same with `H` and a left-hand letter.
+2. **Fast rolls stay letters:** type words with home-row letters fast (`the`, `start`, `sharp`) → no
+   mods.
+3. **Thumb layers:** hold `Space` and use Nav arrows (right hand); hold `Bksp` / `Enter` for Num /
+   Sym. On Vial, for a Nav key on the left hand, hold `Space` for 200 ms first.
+4. **Combos:** `B`+`L` → Esc, `L`+`W` → Enter, `F`+`U` → Esc, `O`+`U` → `'`, `X`+`M` → Cmd+C.
+5. **Graphite shift overrides:** Shift+`'` → `_`, Shift+`,` → `?`, Shift+`/` → `<`, Shift+`-` → `"`.
+6. **Leader (ZMK only):** left half: hold `Bksp`, tap the outer bottom-left key, type `B O O T` →
+   `RPI-RP2` drive. Right half (USB in the right half): hold `Space`, tap the outer bottom-right key,
+   type `B O O T`. `R E S E T` restarts the half.
+7. **Removed keys (Corne):** Nav has no Fn key on the left inner home-row key, Mouse has no Caps Lock, and the
+   Sym/Num right thumbs do nothing.
 
 ## Build
 

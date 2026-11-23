@@ -28,7 +28,9 @@ and the build pipeline, see the [README](README.md).
 - After keymap changes that affect the layout, regenerate the diagram with `just draw` (renders
   `draw/silakka54.svg`). The `Draw keymap` workflow also renders and commits it on push.
 - `just test` is a snapshot-test harness for developing the ZMK **modules** checked out under
-  `modules/zmk/`. It does not test this repo's keymap; the keymap is validated by building.
+  `modules/zmk/`. It does not test this repo's keymap; the keymap is validated by building, and
+  its behavior by hand on hardware (README "Test status": per-build status and checklist). Update
+  that section when a hardware test is done or a change makes a past test stale.
 
 ## How the multi-board layout works
 
