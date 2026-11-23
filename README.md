@@ -89,9 +89,9 @@ hand, or a mod on its own.
   a stray mod; the other-hand rule still keeps same-hand rolls as letters.
 - In both Vial builds, Chordal Hold counts each thumb key as its own hand. So a home-row mod plus a
   thumb key on the same hand is not a chord: holding `A` and tapping `Bksp` gives `a`, then
-  Backspace, not Ctrl+Backspace. The other way round, holding `Space` for Nav and pressing a Nav
-  key on the same hand (the left mods) waits for the 200 ms tapping term. The ZMK Silakka54 takes
-  all thumbs as hold-trigger keys instead.
+  Backspace, not Ctrl+Backspace. In the same way, to use a Nav key on the same hand as `Space`
+  (the left mods), hold `Space` for 200 ms (the tapping term) first; a faster press types `Space`
+  and that key. The ZMK Silakka54 takes all thumbs as hold-trigger keys instead.
 - A thumb layer turns on when the other key is released or after the 200 ms tapping term (Vial's
   QMK Settings owns the per-key hold callbacks, so the thumbs cannot turn on at the press).
 - The ZMK combos use the same 150 ms idle rule, so fast rolls such as `bl` type letters, not
@@ -161,9 +161,13 @@ Compared with the custom Corne firmware this repo built before, the stock firmwa
 
 - fires combos on every layer, so `.` + `-` on Num can start the sticky Meh combo;
 - does not take the thumb layer-taps out of Chordal Hold: a home-row mod plus a thumb on the same
-  hand stays a letter, and a Nav key on the same hand as `Space` waits for the 200 ms term (see
-  [Home-row mods](#home-row-mods));
+  hand stays a letter, and for a Nav key on the same hand as `Space` you hold `Space` for 200 ms
+  first (see [Home-row mods](#home-row-mods));
 - starts the LEDs on its own default: choose **Typing Heatmap** once under **Lighting** in Vial.
+
+> [!NOTE]
+> The stock firmware with this `.vil` is not yet tested on hardware. The earlier hardware test
+> (2026-11-21) was of the custom Corne firmware this repo no longer builds.
 
 ## Silakka54 (QMK/Vial)
 

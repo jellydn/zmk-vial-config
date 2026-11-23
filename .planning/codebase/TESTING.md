@@ -49,18 +49,21 @@ Not applicable.
 - Parity between `config/base.keymap`, the Silakka54 `keymap.c` and both `.vil` is not checked in
   CI. The Corne has no `keymap.c`: it runs foostan's stock Vial firmware, and the `.vil` is its only
   source.
-- The Silakka54 Vial build is marked UNTESTED on hardware in the README.
+- The Silakka54 Vial build and the stock Corne firmware with the `.vil` are marked UNTESTED on
+  hardware in the README. The 2026-11-21 Corne hardware test was of the old custom firmware.
 
 ## Test Types
 
 **Build tests:** every target, in CI.
-**Hardware tests:** manual, Silakka54 ZMK and Corne with `.vil` loaded.
+**Hardware tests:** manual, Silakka54 ZMK, and the old custom Corne firmware with its `.vil`.
 **E2E:** not used.
 
 ## Common Patterns
 
-**Verify a keymap change:** push a branch; the path-filtered build workflow runs. Download the
-artifact or wait for the `latest` release after merge.
+**Verify a ZMK or Silakka54 keymap change:** push a branch; the path-filtered build workflow runs.
+Download the artifact or wait for the `latest` release after merge.
+**Verify a Corne `.vil` change:** no build runs (the Corne has no firmware here). Load the `.vil` in
+Vial on the keyboard; the `latest` release gets it after merge.
 
 ---
 
