@@ -9,7 +9,7 @@ share one layout:
 
 1. Silakka54 on ZMK (`config/`) - the main build (current settings untested; see README "Test status").
 2. Corne v4.1 on foostan's stock Vial firmware + `qmk/corne-v4.1-graphite.vil` (no firmware here).
-3. Silakka54 on Squalius-cephalus' stock Vial firmware (v1.4led) + `qmk/silakka54-graphite.vil`, never tested on hardware.
+3. Silakka54 on Squalius-cephalus' stock Vial firmware (v1.4led: `LEFT` .uf2 on the left half, `RIGHT` on the right) + `qmk/silakka54-graphite.vil`, never tested on hardware.
 
 **Key Characteristics:**
 - The layout is written by hand once in ZMK devicetree, plus two `.vil`

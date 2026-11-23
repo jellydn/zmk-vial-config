@@ -74,7 +74,7 @@ Release asserts exactly 2 `.uf2`; adding a board needs that number changed.
 ## Dependencies at Risk
 
 **Stock Vial `.uf2` links:** foostan's Corne `.uf2` (pinned by commit) and Squalius-cephalus'
-Silakka54 v1.4led release asset, in `release.yml` and the README; bumped by hand.
+Silakka54 v1.4led `LEFT`/`RIGHT` release assets (with sha256), in `release.yml` and the README; bumped by hand.
 
 ## Missing Critical Features
 

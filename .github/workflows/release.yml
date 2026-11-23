@@ -49,12 +49,17 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           # The stock Vial firmware each .vil was checked against.
-          SILAKKA54_UF2_URL: https://github.com/Squalius-cephalus/silakka54/releases/download/v1.4led/silakka54_vial_led_LEFT.uf2
+          SILAKKA54_LEFT_UF2_URL: https://github.com/Squalius-cephalus/silakka54/releases/download/v1.4led/silakka54_vial_led_LEFT.uf2
+          SILAKKA54_LEFT_UF2_SHA256: 23d905e7780970d9885715744b662262518d0759042b53ac34a132a5d521cb98
+          SILAKKA54_RIGHT_UF2_URL: https://github.com/Squalius-cephalus/silakka54/releases/download/v1.4led/silakka54_vial_led_RIGHT.uf2
+          SILAKKA54_RIGHT_UF2_SHA256: 2fb324cbbd8e6f0487a18da672105aed30b2934a49e0c8317c44e5d2b0f6921c
           CORNE_UF2_URL: https://github.com/foostan/kbd_firmware/raw/7e94242f7474761609d7ec16df0872a9785c2ccb/keyboards/crkbd/vial-kb/vial-qmk/.build/crkbd_rev4_1_standard_vial.uf2
         run: |
           gh release delete latest --cleanup-tag --yes || true
           gh release create latest release/* --target "$GITHUB_SHA" --title "Firmware ($(date -u +%F), ${GITHUB_SHA::7})" --notes "All firmware built from ${GITHUB_SHA}. See the README for how to flash. Load the .vil in Vial after every Vial flash.
 
-          Silakka54 Vial: flash Squalius-cephalus' v1.4led firmware ($SILAKKA54_UF2_URL) on both halves, then load silakka54-graphite.vil.
+          Silakka54 Vial: flash Squalius-cephalus' v1.4led firmware, one file for each half, then load silakka54-graphite.vil.
+          - Left half: $SILAKKA54_LEFT_UF2_URL (sha256 $SILAKKA54_LEFT_UF2_SHA256)
+          - Right half: $SILAKKA54_RIGHT_UF2_URL (sha256 $SILAKKA54_RIGHT_UF2_SHA256)
 
           Corne v4.1: flash foostan's stock Vial firmware ($CORNE_UF2_URL), then load corne-v4.1-graphite.vil."

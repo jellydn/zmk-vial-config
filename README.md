@@ -19,7 +19,7 @@ plus our `.vil`: [Corne v4.1](#corne-v41-qmkvial) and [Silakka54 Vial](#silakka5
 | --------- | --------- | ---------------------------------------- | ------------------------------------------- |
 | Silakka54 | supported (current settings untested, see [Test status](#test-status)) | `rpi_pico//zmk` + `silakka54_left/right` | Onboard RP2040, full-duplex wired split     |
 | Corne v4.1 | Vial (stock, untested) | foostan's `crkbd_rev4_1_standard_vial.uf2` + `qmk/corne-v4.1-graphite.vil` | ZMK lacks single-wire (half-duplex) split on RP2040, so it runs Vial |
-| Silakka54 | Vial (stock, untested) | Squalius-cephalus' [`silakka54_vial_led_LEFT.uf2`](https://github.com/Squalius-cephalus/silakka54/releases/download/v1.4led/silakka54_vial_led_LEFT.uf2) (v1.4led) + `qmk/silakka54-graphite.vil` | Same layout as the ZMK build, for Vial users |
+| Silakka54 | Vial (stock, untested) | Squalius-cephalus' v1.4led [`silakka54_vial_led_LEFT.uf2`](https://github.com/Squalius-cephalus/silakka54/releases/download/v1.4led/silakka54_vial_led_LEFT.uf2) (left half) and [`silakka54_vial_led_RIGHT.uf2`](https://github.com/Squalius-cephalus/silakka54/releases/download/v1.4led/silakka54_vial_led_RIGHT.uf2) (right half) + `qmk/silakka54-graphite.vil` | Same layout as the ZMK build, for Vial users |
 
 ## Keymap
 
@@ -179,7 +179,8 @@ Compared with the custom Corne firmware this repo built before, the stock firmwa
 
 A Vial setup of the same layout, next to the ZMK one. It runs the board maker's stock Vial firmware,
 Squalius-cephalus' [v1.4led release](https://github.com/Squalius-cephalus/silakka54/releases/tag/v1.4led)
-(2026-05-20, [`silakka54_vial_led_LEFT.uf2`](https://github.com/Squalius-cephalus/silakka54/releases/download/v1.4led/silakka54_vial_led_LEFT.uf2) on both halves, so the left half takes the USB cable). This repo
+(2026-05-20): [`silakka54_vial_led_LEFT.uf2`](https://github.com/Squalius-cephalus/silakka54/releases/download/v1.4led/silakka54_vial_led_LEFT.uf2) on the left half and [`silakka54_vial_led_RIGHT.uf2`](https://github.com/Squalius-cephalus/silakka54/releases/download/v1.4led/silakka54_vial_led_RIGHT.uf2) on the right half, as the
+[maker's wiki](https://github.com/Squalius-cephalus/silakka54/wiki/Firmware-Update) says. This repo
 keeps only the setup for it:
 
 - `qmk/silakka54-graphite.vil`: the 6 layers of `config/base.keymap`, the 11 combos at 50 ms, the 4
@@ -205,7 +206,7 @@ Hardware tests are done by hand; CI only checks that each firmware builds. Statu
 | Build | Firmware file | Current settings | Tested on hardware | Untested |
 | --- | --- | --- | --- | --- |
 | Silakka54 ZMK | `silakka54-zmk-left.uf2`, `silakka54-zmk-right.uf2` (release) | Home-row mods: 200 ms, `balanced`, other-hand hold-trigger on release, quick tap 200 ms, no `require-prior-idle-ms` (PR #18). Combos: 50 ms, 150 ms idle. Leader `B O O T` / `R E S E T` (PR #4) | 2026-11-22, firmware with urob's 280 ms term and 150 ms idle rule (before PR #18): it types, and home-row Shift waits after a letter (the reason for PR #18) | Everything with the PR #18 settings. The Leader key (PR #4 left its hardware checks open) |
-| Silakka54 Vial | Squalius-cephalus' v1.4led [`silakka54_vial_led_LEFT.uf2`](https://github.com/Squalius-cephalus/silakka54/releases/download/v1.4led/silakka54_vial_led_LEFT.uf2) (both halves) + `silakka54-graphite.vil` | 200 ms, Permissive Hold, Chordal Hold, Flow Tap off, quick tap 200 ms; combos 50 ms on every layer | Nothing | Everything, also flashing and both halves working |
+| Silakka54 Vial | Squalius-cephalus' v1.4led [`silakka54_vial_led_LEFT.uf2`](https://github.com/Squalius-cephalus/silakka54/releases/download/v1.4led/silakka54_vial_led_LEFT.uf2) (left half) and [`silakka54_vial_led_RIGHT.uf2`](https://github.com/Squalius-cephalus/silakka54/releases/download/v1.4led/silakka54_vial_led_RIGHT.uf2) (right half) + `silakka54-graphite.vil` | 200 ms, Permissive Hold, Chordal Hold, Flow Tap off, quick tap 200 ms; combos 50 ms on every layer | Nothing | Everything, also flashing and both halves working |
 | Corne v4.1 | foostan's [`crkbd_rev4_1_standard_vial.uf2`](https://github.com/foostan/kbd_firmware/raw/7e94242f7474761609d7ec16df0872a9785c2ccb/keyboards/crkbd/vial-kb/vial-qmk/.build/crkbd_rev4_1_standard_vial.uf2) + `corne-v4.1-graphite.vil` | The same QMK Settings as the Silakka54 Vial `.vil` and the dotfiles `.vil`, except quick tap 0 (not 200); combos on every layer; thumbs count as their own hand | Only the old custom firmware (2026-11-21, from `main`, Flow Tap 150 ms): `Space` for Nav after typing, combos, Graphite shift overrides and M0 worked. Later its home-row Shift waited after a letter (fixed by Flow Tap off, PR #16) | Everything on the stock firmware (PR #21) |
 
 **Checklist after a flash** (load the `.vil` first on Vial builds):
@@ -298,15 +299,18 @@ The buttons are the same as for ZMK (see the diagram above). With Vial firmware 
 pressing RESET twice quickly also opens the bootloader. Bootmagic works on the left half only: hold
 the outer top key (`` ` ``) while you plug in the USB cable.
 
-1. Download Squalius-cephalus' [`silakka54_vial_led_LEFT.uf2`](https://github.com/Squalius-cephalus/silakka54/releases/download/v1.4led/silakka54_vial_led_LEFT.uf2) (v1.4led) and `silakka54-graphite.vil`
-   from the [latest release](https://github.com/jellydn/zmk-vial-config/releases/tag/latest). Both
-   halves use the `LEFT` file: it is built with `MASTER_LEFT`, so the half with USB is the left
-   half (the maker's v1.1 release notes; his wiki suggests the `RIGHT` file on the right half).
+1. Download Squalius-cephalus' v1.4led files, one for each half, as the
+   [maker's wiki](https://github.com/Squalius-cephalus/silakka54/wiki/Firmware-Update) says, and
+   `silakka54-graphite.vil` from the [latest release](https://github.com/jellydn/zmk-vial-config/releases/tag/latest):
+   - left half: [`silakka54_vial_led_LEFT.uf2`](https://github.com/Squalius-cephalus/silakka54/releases/download/v1.4led/silakka54_vial_led_LEFT.uf2), sha256 `23d905e7780970d9885715744b662262518d0759042b53ac34a132a5d521cb98`
+   - right half: [`silakka54_vial_led_RIGHT.uf2`](https://github.com/Squalius-cephalus/silakka54/releases/download/v1.4led/silakka54_vial_led_RIGHT.uf2), sha256 `2fb324cbbd8e6f0487a18da672105aed30b2934a49e0c8317c44e5d2b0f6921c`
+
+   Check a file with `sha256sum <file>` (macOS: `shasum -a 256 <file>`).
 2. Unplug the USB cable, then unplug the TRRS cable between the halves.
 3. Left half: hold BOOT and plug the USB cable into the left half, then let go. A drive named
    `RPI-RP2` opens. Copy `silakka54_vial_led_LEFT.uf2` to it; the drive closes by itself when the flash
    is done.
-4. Unplug the USB cable. Do step 3 on the right half with the same file.
+4. Unplug the USB cable. Do step 3 on the right half with `silakka54_vial_led_RIGHT.uf2`.
 5. With the USB cable unplugged, connect the TRRS cable.
 6. Plug the USB cable into the **left** half.
 7. Open [Vial](https://get.vial.today) (desktop app or web), choose **File → Load saved layout** and

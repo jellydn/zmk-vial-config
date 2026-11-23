@@ -7,7 +7,7 @@
 **Source repositories fetched at build time:**
 - zmkfirmware/zmk, zmkfirmware/zephyr and Zephyr HAL repos - via west (`config/west.yml`)
 - urob/zmk-helpers, urob/zmk-leader-key - ZMK modules via west
-- Squalius-cephalus/silakka54 v1.4led - stock Silakka54 Vial `.uf2`, linked (`SILAKKA54_UF2_URL` in `release.yml`, README)
+- Squalius-cephalus/silakka54 v1.4led - stock Silakka54 Vial `.uf2` files (`LEFT` for the left half, `RIGHT` for the right), linked with sha256 (`SILAKKA54_LEFT_UF2_URL` / `SILAKKA54_RIGHT_UF2_URL` in `release.yml`, README)
 - foostan/kbd_firmware - stock Corne v4.1 Vial `.uf2`, linked (`CORNE_UF2_URL` in `release.yml`, README)
 
 **Reusable GitHub workflows (unpinned, `@main`):**

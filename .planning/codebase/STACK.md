@@ -31,7 +31,7 @@
 
 **Core:**
 - ZMK (zmkfirmware/zmk, pinned `4de3133…`, 2026-11-16) on Zephyr `v4.1.0+zmk-fixes` - Silakka54 firmware
-- Squalius-cephalus/silakka54 v1.4led - stock Silakka54 Vial `.uf2`, linked from README and release notes
+- Squalius-cephalus/silakka54 v1.4led - stock Silakka54 Vial `.uf2` files (`LEFT` / `RIGHT`, one for each half), linked from README and release notes
 - foostan/kbd_firmware (`7e94242…`) - stock Corne v4.1 Vial `.uf2`, linked from README and release notes
 
 **Testing:**
