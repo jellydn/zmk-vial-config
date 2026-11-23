@@ -9,15 +9,16 @@ Miryoku-style thumb layers.
 ![Keymap](draw/silakka54.svg)
 
 **[Download firmware](https://github.com/jellydn/zmk-vial-config/releases/tag/latest)**: every push to
-`main` builds all firmware (Silakka54 ZMK left/right, Silakka54 Vial, Corne v4.1 Vial) and puts the
-`.uf2` files, both `.vil` files and the keymap images in the `latest` release.
+`main` builds the Silakka54 firmware (ZMK left/right, Vial) and puts the `.uf2` files, both `.vil`
+files and the keymap images in the `latest` release. The Corne runs foostan's stock Vial firmware
+plus `corne-v4.1-graphite.vil`; see [Corne v4.1](#corne-v41-qmkvial).
 
 ## Keyboards
 
 | Keyboard  | Status    | Build target                             | Notes                                       |
 | --------- | --------- | ---------------------------------------- | ------------------------------------------- |
 | Silakka54 | supported | `rpi_pico//zmk` + `silakka54_left/right` | Onboard RP2040, full-duplex wired split     |
-| Corne v4.1 | QMK/Vial | `crkbd/rev4_1/standard` (see `qmk/`)    | ZMK lacks single-wire (half-duplex) split on RP2040, so it runs Vial |
+| Corne v4.1 | Vial (stock) | foostan's `crkbd_rev4_1_standard_vial.uf2` + `qmk/corne-v4.1-graphite.vil` | ZMK lacks single-wire (half-duplex) split on RP2040, so it runs Vial |
 | Silakka54 | QMK/Vial (untested) | `silakka54` (see `qmk/silakka54/`) | Same layout as the ZMK build, for Vial users |
 
 ## Keymap
@@ -86,11 +87,13 @@ hand, or a mod on its own.
   letter typed a letter, so Shift needed a pause first; on the ZMK Silakka54 this showed on
   hardware too. Without it, a fast roll that nests an other-hand key inside a home-row key can give
   a stray mod; the other-hand rule still keeps same-hand rolls as letters.
-- On the Corne, Chordal Hold counts the thumb layer-taps as neither hand (`chordal_hold_handedness`
-  in `keymap.c`). So holding `Space` for Nav works with Nav keys on the same hand (Esc, the left
-  mods), and a home-row mod plus any thumb key is a chord, as on the Silakka54. A thumb layer turns
-  on when the other key is released or after the 200 ms tapping term (Vial's QMK Settings owns the
-  per-key hold callbacks, so the thumbs cannot turn on at the press).
+- In both Vial builds, Chordal Hold counts each thumb key as its own hand. So a home-row mod plus a
+  thumb key on the same hand is not a chord: holding `A` and tapping `Bksp` gives `a`, then
+  Backspace, not Ctrl+Backspace. The other way round, holding `Space` for Nav and pressing a Nav
+  key on the same hand (the left mods) waits for the 200 ms tapping term. The ZMK Silakka54 takes
+  all thumbs as hold-trigger keys instead.
+- A thumb layer turns on when the other key is released or after the 200 ms tapping term (Vial's
+  QMK Settings owns the per-key hold callbacks, so the thumbs cannot turn on at the press).
 - The ZMK combos use the same 150 ms idle rule, so fast rolls such as `bl` type letters, not
   Esc. Vial combos have no idle rule.
 - Vial resets Permissive Hold, Chordal Hold and Flow Tap to off on every new build. Load the `.vil`
@@ -98,22 +101,23 @@ hand, or a mod on its own.
 
 ## FAQ: tap-hold settings
 
-Corne values come from Vial's QMK Settings (load the `.vil`; check them under **QMK Settings →
-Tap-Hold**).
+The Vial values come from Vial's QMK Settings (load the `.vil`; check them under **QMK Settings →
+Tap-Hold**). The Corne `.vil` has the same tap-hold settings and home-row keys as the original
+[dotfiles graphite.vil](https://github.com/jellydn/dotfiles/blob/master/mics/corne/graphite.vil).
 
 | Setting | What it does | Why / trade-off | Example |
 | --- | --- | --- | --- |
 | Tapping term 200 ms | A key held longer than this on its own is a hold. | Fallback only; the rules below decide most presses sooner. Shorter means faster mods but more stray mods. | Rest on `S` 250 ms → Shift. |
 | Permissive Hold | Another key pressed *and released* inside a held key makes it a hold at once. | Fast shortcuts (ZMK `balanced`). A sloppy other-hand roll can give a mod; Chordal Hold catches same-hand rolls. | `T`↓ `C`↓ `C`↑ → Ctrl+C. |
 | Flow Tap off | Home-row mods are decided by the rules above, also right after a letter. | As in the original `.vil`. At 150 ms, `S`/`H` right after a letter gave a letter, not Shift. | `e`, then `S`↓ `O`↓ `O`↑ → `O`. |
-| Chordal Hold | A hold needs the next key on the *other* hand. | Same-hand rolls stay letters. A same-hand mod needs the full 200 ms. Thumb layer-taps count as neither hand, so Nav keys on the thumb's own hand work. | `S` `T` (same hand) → `st`. |
+| Chordal Hold | A hold needs the next key on the *other* hand. | Same-hand rolls stay letters. A same-hand mod needs the full 200 ms. A thumb key counts as its own hand. | `S` `T` (same hand) → `st`. |
 | Combo term 50 ms | Combo keys must go down within 50 ms. | Chords fire, rolls type. Vial has no idle rule, so a very fast `bl` can still give Esc. | `B`+`L` together → Esc. |
-| Base-layer combos | Combos fire only on the base layer (`combo_should_trigger`). | Stops `.` `-` on Num from firing sticky Meh. | — |
+| Base-layer combos | Silakka54 only: combos fire only on the base layer (`combo_should_trigger`). | Stops `.` `-` on Num from firing sticky Meh. The stock Corne firmware fires combos on every layer. | — |
 
 **Why does my thumb layer wait ~200 ms?** Hold a thumb key and *hold* the next key (for example
 `Space` + an arrow): the layer turns on only at the 200 ms term. A tapped next key is instant. Vial's
-QMK Settings owns "hold on other key press" for all keys, so `keymap.c` cannot turn it on for the
-thumbs only (PR #9). Turning it on globally in Vial would also give stray home-row mods.
+QMK Settings owns "hold on other key press" for all keys, so it cannot be on for the thumbs only.
+Turning it on globally in Vial would also give stray home-row mods.
 
 **Silakka54 (ZMK):** the home-row mods now match Vial, with ZMK names: a 200 ms term, `balanced`
 (Permissive Hold), `hold-trigger-key-positions` on the other hand and all thumbs plus
@@ -140,30 +144,26 @@ extra keys, then includes `base.keymap`. Combos and HRM trigger keys use the
 
 ## Corne v4.1 (QMK/Vial)
 
-`qmk/` holds the Corne v4.1 build. It keeps the same layout as the Silakka54, minus the number row:
+The Corne runs foostan's stock Vial firmware for the Corne v4.1
+([`crkbd_rev4_1_standard_vial.uf2`](https://github.com/foostan/kbd_firmware/raw/7e94242f7474761609d7ec16df0872a9785c2ccb/keyboards/crkbd/vial-kb/vial-qmk/.build/crkbd_rev4_1_standard_vial.uf2) from
+[foostan/kbd_firmware](https://github.com/foostan/kbd_firmware)). This repo keeps only the setup
+for it:
 
-- `qmk/keymaps/jellydn/`: QMK keymap with Vial enabled, built on foostan's Corne v4.1 Vial build.
-  The `Build Corne v4.1 Vial firmware` workflow builds the `.uf2`.
-- `qmk/corne-v4.1-graphite.vil`: the full Vial setup (layers, combos, key overrides, macro, QMK
-  settings). Load it in Vial after you flash; see [How to flash](#corne-v41-vial).
+- `qmk/corne-v4.1-graphite.vil`: the full Vial setup: the 6 layers (the Silakka54 layout minus
+  the number row), the 11 combos at 50 ms, the 4 Graphite shift overrides, macro M0 and the QMK
+  Settings. Load it in Vial after every flash; see [How to flash](#corne-v41-vial).
 
-The extra keys hold ←/→ (EX1) and Play/Pause / Next Track (EX2). The `.vil` is the single source of truth for
-combos, key overrides, macro M0 and QMK Settings: Vial keeps them in EEPROM, not in `keymap.c`, and
-erases them on the first boot of every new build; the firmware then writes the `.vil` values back. The firmware
-itself only adds what Vial cannot store: combos fire on the base layer only, Chordal Hold counts
-the thumb layer-taps as neither hand, and the LEDs start on Typing Heatmap. On that first boot it
-also writes the `.vil` combos, Graphite shift overrides, macro M0 and QMK Settings (Permissive Hold,
-Chordal Hold, tap code delay 0; Flow Tap stays off) back,
-so they work before you load the `.vil` (`default_combos`, `default_key_overrides`,
-`default_macros` and `write_default_qmk_settings` in `keymap.c`; keep them in sync with the `.vil`).
+The extra keys hold ←/→ (EX1) and Play/Pause / Next Track (EX2). The stock firmware has the same
+Vial UID, 6 layers and the `split_3x6_3_ex2` layout, so the `.vil` loads as is. Vial keeps combos,
+key overrides, macros and QMK Settings in EEPROM, so they come only from the `.vil`.
 
-Tested on hardware (2026-11-21): the firmware from `main` with `corne-v4.1-graphite.vil` loaded.
-Holding a thumb key for its layer right after typing works, and the combos, Graphite shift overrides
-and macro M0 work straight after a flash.
+Compared with the custom Corne firmware this repo built before, the stock firmware:
 
-> [!NOTE]
-> Flow Tap off on the Corne (home-row Shift right after a letter) is not yet tested on hardware.
-> After you flash, load the new `.vil` too: an older copy still sets Flow Tap to 150 ms.
+- fires combos on every layer, so `.` + `-` on Num can start the sticky Meh combo;
+- does not take the thumb layer-taps out of Chordal Hold: a home-row mod plus a thumb on the same
+  hand stays a letter, and a Nav key on the same hand as `Space` waits for the 200 ms term (see
+  [Home-row mods](#home-row-mods));
+- starts the LEDs on its own default: choose **Typing Heatmap** once under **Lighting** in Vial.
 
 ## Silakka54 (QMK/Vial)
 
@@ -289,9 +289,10 @@ covers them, press them with a non-metal stick between the keys.
 
 **Steps**
 
-1. In the Actions tab, filter `Build Corne v4.1 Vial firmware` by your branch (`main` once merged),
-   open the green run for the commit you want, and download the `corne-v4.1-vial` artifact. It holds `corne-v4.1-vial.uf2` and
-   `corne-v4.1-graphite.vil`. Both halves use the same `.uf2`; each half knows its side from the PCB.
+1. Download foostan's Corne v4.1 Vial firmware,
+   [`crkbd_rev4_1_standard_vial.uf2`](https://github.com/foostan/kbd_firmware/raw/7e94242f7474761609d7ec16df0872a9785c2ccb/keyboards/crkbd/vial-kb/vial-qmk/.build/crkbd_rev4_1_standard_vial.uf2), and `corne-v4.1-graphite.vil` from the
+   [latest release](https://github.com/jellydn/zmk-vial-config/releases/tag/latest). Both halves
+   use the same `.uf2`; each half knows its side from the PCB.
 2. Unplug the USB cable, then unplug the TRS/TRRS cable between the halves.
 3. Left half: hold BOOT and plug the USB cable into the left half, then let go of BOOT. If it is
    already plugged in, hold BOOT, press RESET, then let go of BOOT.
@@ -301,20 +302,17 @@ covers them, press them with a non-metal stick between the keys.
 6. With the USB cable unplugged, connect the TRS/TRRS cable (v4.1 takes either).
 7. Plug the USB cable into the **left** half. (The right half also works: the half with USB becomes
    the main half.)
-8. Optional: open [Vial](https://get.vial.today/), choose **File → Load saved layout** and pick
-   `corne-v4.1-graphite.vil`. Each new build erases Vial's EEPROM, but the firmware writes the
-   combos, Graphite shift overrides, macro M0 and QMK Settings back on first boot, so this step only
-   restores anything you changed in Vial.
-
-Other way into the bootloader: hold the top-row key second from the outer edge (`B` on the left,
-`J` on the right) while you plug in that half. This also erases the Vial settings, so load the
-`.vil` again afterwards.
+8. Open [Vial](https://get.vial.today/), choose **File → Load saved layout** and pick
+   `corne-v4.1-graphite.vil`. Without this step the keyboard has foostan's default QWERTY layout
+   and no combos, Graphite shift symbols, M0 macro or tap-hold settings. Do it again after every
+   flash.
+9. Once: under **Lighting** in Vial, choose **Typing Heatmap**.
 
 **Troubleshooting**
 
 - One half does not type: flash that half again.
-- Combos or the Graphite shift symbols do not work: check that you are on the base layer (both work
-  only there). If you changed them in Vial, load the `.vil` again to restore them.
+- Combos, the Graphite shift symbols or the home-row mods do not work: load the `.vil` again. The
+  Graphite shift symbols work only on the base layer.
 - A half stops working at random: Corne v4 PCBs are sensitive to radio noise, most often from a
   phone ([foostan/crkbd#265](https://github.com/foostan/crkbd/issues/265)). Plug the USB cable in
   again and keep phones more than 30 cm from the keyboard.

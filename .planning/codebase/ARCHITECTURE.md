@@ -8,11 +8,11 @@
 share one layout:
 
 1. Silakka54 on ZMK (`config/`) - the main, hardware-tested build.
-2. Corne v4.1 on QMK/Vial (`qmk/keymaps/jellydn/` + `qmk/corne-v4.1-graphite.vil`).
+2. Corne v4.1 on foostan's stock Vial firmware + `qmk/corne-v4.1-graphite.vil` (no firmware here).
 3. Silakka54 on QMK/Vial (`qmk/silakka54/` + `qmk/silakka54-graphite.vil`), untested.
 
 **Key Characteristics:**
-- The layout is written by hand three times (ZMK devicetree, two QMK `keymap.c`), plus two `.vil`
+- The layout is written by hand twice (ZMK devicetree, the Silakka54 `keymap.c`), plus two `.vil`
   files. Nothing generates one from the other; sync is manual.
 - ZMK holds all behavior (combos, HRMs, leader) in the firmware. Vial keeps combos, key overrides,
   macro M0 and QMK Settings in EEPROM; the `.vil` is their source of truth.
@@ -38,10 +38,8 @@ share one layout:
 
 **QMK/Vial layer:**
 - Purpose: Vial firmware with default keymap plus small C hooks Vial cannot store.
-- Location: `qmk/keymaps/jellydn/`, `qmk/silakka54/`.
-- Hooks: `combo_should_trigger` (base layer only), `is_flow_tap_key` (Flow Tap for HRMs only),
-  Corne only: `chordal_hold_handedness` (thumbs = neither hand), first-boot write of default combos
-  and key overrides (`keyboard_post_init_user`), RGB Typing Heatmap.
+- Location: `qmk/silakka54/`.
+- Hooks: `combo_should_trigger` (base layer only).
 
 **CI/release layer:** `.github/workflows/*.yml` (see `INTEGRATIONS.md`).
 
@@ -53,13 +51,14 @@ share one layout:
 3. Output: `silakka54-zmk-left.uf2`, `silakka54-zmk-right.uf2` (artifact `firmware`).
 
 **Vial build:**
-1. Check out vial-qmk (and kbd_firmware for the Corne) at pinned SHAs.
+1. Check out vial-qmk at its pinned SHA.
 2. Copy the repo keymap into the keyboard's `keymaps/jellydn/`; `qmk compile`.
-3. Output: one `.uf2` per board plus the `.vil`, uploaded as an artifact.
+3. Output: `silakka54-vial.uf2` plus the `.vil`, uploaded as an artifact.
 
 **Release:**
-1. `release.yml` on push to `main` calls the three build workflows (`workflow_call`).
-2. Collects `*.uf2`, `*.vil`, `draw/*.svg`; asserts exactly 4 `.uf2`.
+1. `release.yml` on push to `main` calls the two build workflows (`workflow_call`).
+2. Collects `*.uf2`, `*.vil` (plus the Corne `.vil` from `qmk/`), `draw/*.svg`; asserts exactly 3
+   `.uf2`. The release notes link foostan's stock Corne `.uf2`.
 3. Deletes and recreates the `latest` release and tag at `GITHUB_SHA`.
 
 **Keymap diagram:**
@@ -81,7 +80,6 @@ share one layout:
 ## Entry Points
 
 - `config/silakka54.keymap` - ZMK keymap entry (draw also parses this file).
-- `qmk/keymaps/jellydn/keymap.c` - Corne Vial keymap.
 - `qmk/silakka54/keymap.c` - Silakka54 Vial keymap.
 - `.github/workflows/release.yml` - end-to-end build and publish.
 - `Justfile` - local tasks (`init`, `build`, `draw`, `bump-west`, `test`).

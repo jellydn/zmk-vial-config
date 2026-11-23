@@ -7,8 +7,8 @@
 **Source repositories fetched at build time:**
 - zmkfirmware/zmk, zmkfirmware/zephyr and Zephyr HAL repos - via west (`config/west.yml`)
 - urob/zmk-helpers, urob/zmk-leader-key - ZMK modules via west
-- vial-kb/vial-qmk at `VIAL_QMK_REF` - `.github/workflows/build-qmk.yml`, `build-qmk-silakka54.yml`
-- foostan/kbd_firmware at `KBD_FIRMWARE_REF` - Corne keyboard definition, `build-qmk.yml`
+- vial-kb/vial-qmk at `VIAL_QMK_REF` - `.github/workflows/build-qmk-silakka54.yml`
+- foostan/kbd_firmware - stock Corne v4.1 Vial `.uf2`, linked (`CORNE_UF2_URL` in `release.yml`, README)
 
 **Reusable GitHub workflows (unpinned, `@main`):**
 - `urob/zmk-actions/.github/workflows/build-user-config.yml` - ZMK build (`build-nix.yml`)
@@ -22,8 +22,8 @@
 **Databases:** None.
 
 **File Storage:**
-- GitHub Actions artifacts: `firmware` (ZMK), `corne-v4.1-vial`, `silakka54-vial`.
-- GitHub Release `latest` (rolling): rebuilt on every push to `main` by `release.yml`; holds 4
+- GitHub Actions artifacts: `firmware` (ZMK), `silakka54-vial`.
+- GitHub Release `latest` (rolling): rebuilt on every push to `main` by `release.yml`; holds 3
   `.uf2`, both `.vil` and `draw/*.svg`.
 
 **Caching:** Handled inside the reusable ZMK workflow; QMK workflows do not cache.
@@ -48,9 +48,8 @@
 
 **CI Pipeline (`.github/workflows/`):**
 - `build-nix.yml` - ZMK build; push/PR on `config/**`, `build.yaml`; also `workflow_call`.
-- `build-qmk.yml` - Corne Vial build; push/PR on `qmk/keymaps/**`, the Corne `.vil`; `workflow_call`.
 - `build-qmk-silakka54.yml` - Silakka54 Vial build; push/PR on `qmk/silakka54/**`, its `.vil`; `workflow_call`.
-- `release.yml` - calls the three builds and publishes the `latest` release on push to `main`.
+- `release.yml` - calls the two builds and publishes the `latest` release on push to `main`.
 - `draw.yml` - renders and commits `draw/silakka54.svg` on keymap pushes.
 - `bump-west.yml` - Mondays 05:00 UTC, opens a pin-west bump PR.
 - `test-build-env.yml` - nix dev shell smoke test on Linux/macOS x86_64 and arm64.

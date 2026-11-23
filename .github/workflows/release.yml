@@ -21,13 +21,11 @@ concurrency:
 jobs:
   zmk:
     uses: ./.github/workflows/build-nix.yml
-  corne-vial:
-    uses: ./.github/workflows/build-qmk.yml
   silakka54-vial:
     uses: ./.github/workflows/build-qmk-silakka54.yml
 
   release:
-    needs: [zmk, corne-vial, silakka54-vial]
+    needs: [zmk, silakka54-vial]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -43,15 +41,19 @@ jobs:
         run: |
           mkdir release
           find artifacts -type f \( -name '*.uf2' -o -name '*.vil' \) -exec cp {} release/ \;
-          cp draw/*.svg release/
+          cp qmk/corne-v4.1-graphite.vil draw/*.svg release/
           ls -l release
-          test "$(ls release/*.uf2 | wc -l)" -eq 4 # ZMK left + right, Corne Vial, Silakka54 Vial
+          test "$(ls release/*.uf2 | wc -l)" -eq 3 # ZMK left + right, Silakka54 Vial
 
       - name: Publish the "latest" release
         if: github.event_name != 'pull_request'
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
+          # foostan/kbd_firmware at the commit the .vil was checked against.
+          CORNE_UF2_URL: https://github.com/foostan/kbd_firmware/raw/7e94242f7474761609d7ec16df0872a9785c2ccb/keyboards/crkbd/vial-kb/vial-qmk/.build/crkbd_rev4_1_standard_vial.uf2
         run: |
           gh release delete latest --cleanup-tag --yes || true
-          gh release create latest release/* --target "$GITHUB_SHA" --title "Firmware ($(date -u +%F), ${GITHUB_SHA::7})" --notes "All firmware built from ${GITHUB_SHA}. See the README for how to flash. Load the .vil in Vial after every Vial flash."
+          gh release create latest release/* --target "$GITHUB_SHA" --title "Firmware ($(date -u +%F), ${GITHUB_SHA::7})" --notes "All firmware built from ${GITHUB_SHA}. See the README for how to flash. Load the .vil in Vial after every Vial flash.
+
+          Corne v4.1: flash foostan's stock Vial firmware ($CORNE_UF2_URL), then load corne-v4.1-graphite.vil."

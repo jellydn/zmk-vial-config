@@ -26,8 +26,8 @@ None in the repo.
 
 CI checks, by workflow:
 - `build-nix.yml` - ZMK compiles for both halves.
-- `build-qmk.yml` / `build-qmk-silakka54.yml` - Vial firmware compiles; `.uf2` must exist.
-- `release.yml` - exactly 4 `.uf2` files collected (PRs that change `release.yml` run this without
+- `build-qmk-silakka54.yml` - Silakka54 Vial firmware compiles; `.uf2` must exist.
+- `release.yml` - exactly 3 `.uf2` files collected (PRs that change `release.yml` run this without
   publishing).
 - `draw.yml` - keymap parses (`fail_on_error: true`).
 - `test-build-env.yml` - nix shell on 4 platforms: `just init`, `just build silakka54`, `just draw`.
@@ -46,11 +46,10 @@ Not applicable.
 
 **Gaps:**
 - Keymap behavior (HRM timing, combos, leader) is verified only on hardware, by hand.
-- Parity between `config/base.keymap`, both `keymap.c` and both `.vil` is not checked in CI. A
-  scratch check (alias-normalized, position-by-position) on 2026-11-21 found the `.vil` layers equal
-  to their `keymap.c`, except `M0` vs the same shortcut keycode on Mouse, by design.
-- Corne `default_combos` / `default_key_overrides` match the `.vil` (checked the same day).
-- Both Vial builds and the Corne `keymap.c` are marked UNTESTED on hardware in the README.
+- Parity between `config/base.keymap`, the Silakka54 `keymap.c` and both `.vil` is not checked in
+  CI. The Corne has no `keymap.c`: it runs foostan's stock Vial firmware, and the `.vil` is its only
+  source.
+- The Silakka54 Vial build is marked UNTESTED on hardware in the README.
 
 ## Test Types
 

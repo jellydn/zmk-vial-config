@@ -21,11 +21,10 @@
 - Status: fixed 2026-11-21; links point at `docs/build-env.md` and the examples use Silakka54.
 
 **Layout written five times by hand:**
-- Issue: `config/base.keymap`, two `keymap.c`, two `.vil`, plus Corne `default_combos` and
-  `default_key_overrides`. No generator, no parity check in CI.
-- Files: `config/base.keymap`, `qmk/keymaps/jellydn/keymap.c`, `qmk/silakka54/keymap.c`, `qmk/*.vil`
-- Impact: drift is silent. A scratch check today found the `.vil` layers equal to their `keymap.c`
-  (only `M0` vs the same shortcut keycode), and the Corne defaults equal to its `.vil`.
+- Issue: `config/base.keymap`, the Silakka54 `keymap.c` and two `.vil`. No generator, no parity
+  check in CI.
+- Files: `config/base.keymap`, `qmk/silakka54/keymap.c`, `qmk/*.vil`
+- Impact: drift is silent.
 - Fix approach: optional CI script that compares `.vil` and `keymap.c`. Not worth it yet.
 
 ## Known Bugs
@@ -69,26 +68,25 @@ which does not trigger `release.yml`, so the release ships the SVG from before t
 next push.
 
 **Vial EEPROM reset:** every new Vial build erases combos, key overrides, macro and QMK Settings.
-The Corne writes default combos and overrides on first boot; the Silakka54 Vial build does not.
+Load the `.vil` after every flash (Corne and Silakka54 Vial).
 
 ## Scaling Limits
 
-Release asserts exactly 4 `.uf2`; adding a board needs that number changed.
+Release asserts exactly 3 `.uf2`; adding a board needs that number changed.
 
 ## Dependencies at Risk
 
-**foostan/kbd_firmware + vial-qmk pins:** pinned by SHA in `build-qmk*.yml` env; must be bumped by
-hand (dependabot does not see them).
+**vial-qmk pin and the foostan Corne `.uf2` link:** pinned by SHA in `build-qmk-silakka54.yml`,
+`release.yml` and the README; must be bumped by hand (dependabot does not see them).
 
 ## Missing Critical Features
 
-None blocking. Silakka54 Vial lacks the Corne's first-boot defaults (documented in README).
+None blocking.
 
 ## Cross-board Inconsistencies (by design or unconfirmed; not changed)
 
-- Corne Nav has `OSL(_FN)` on the left inner key; ZMK and Silakka54 Vial have nothing there.
-- Corne Sym/Num right thumbs are `Enter`, `Bksp`, `QK_LLCK`; Silakka54 Vial has `XXXXXXX`; ZMK has
-  `&trans` on the held thumb and no Lock key on Sym/Num.
+- The stock Corne Vial firmware fires combos on every layer and counts thumbs as their own hand for
+  Chordal Hold; the Silakka54 Vial keymap limits combos to the base layer.
 - ZMK Nav/Sym/Num carry `&leader`; Vial has no leader (README says so).
 These change keymap behavior, so they need the owner's decision.
 

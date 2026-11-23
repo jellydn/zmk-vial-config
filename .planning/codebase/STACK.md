@@ -7,7 +7,7 @@
 **Primary:**
 - Devicetree + C preprocessor (ZMK keymap DSL) - `config/base.keymap`, `config/combos.dtsi`,
   `config/leader.dtsi`, `config/boards/shields/silakka54/*.dtsi|*.overlay`
-- C (QMK keymaps) - `qmk/keymaps/jellydn/keymap.c` (Corne v4.1), `qmk/silakka54/keymap.c`
+- C (QMK keymap) - `qmk/silakka54/keymap.c`
 
 **Secondary:**
 - JSON - Vial layout definitions (`qmk/*/vial.json`) and saved Vial setups (`qmk/*.vil`)
@@ -21,7 +21,7 @@
 
 **Environment:**
 - Firmware runs on RP2040 microcontrollers: Silakka54 (ZMK board `rpi_pico//zmk`; Vial
-  `silakka54`) and Corne v4.1 (Vial `crkbd/rev4_1/standard`).
+  `silakka54`) and Corne v4.1 (foostan's stock Vial firmware plus `qmk/corne-v4.1-graphite.vil`).
 - No host runtime. Output is `.uf2` firmware files.
 
 **Package Manager:**
@@ -33,8 +33,8 @@
 
 **Core:**
 - ZMK (zmkfirmware/zmk, pinned `4de3133…`, 2026-11-16) on Zephyr `v4.1.0+zmk-fixes` - Silakka54 firmware
-- vial-qmk (vial-kb/vial-qmk, pinned `dd43959…` in workflow env) - both Vial firmwares
-- foostan/kbd_firmware (pinned `7e94242…`) - Corne v4.1 keyboard definition
+- vial-qmk (vial-kb/vial-qmk, pinned `dd43959…` in workflow env) - Silakka54 Vial firmware
+- foostan/kbd_firmware (`7e94242…`) - stock Corne v4.1 Vial `.uf2`, linked from README and release notes
 
 **Testing:**
 - None for the keymap. `just test` is a snapshot harness for ZMK modules only (see `TESTING.md`).
@@ -68,7 +68,7 @@
 **Build:**
 - `build.yaml` - ZMK build matrix (Silakka54 left/right).
 - `config/silakka54.conf` - `CONFIG_ZMK_POINTING=y`.
-- `qmk/keymaps/jellydn/{config.h,rules.mk}`, `qmk/silakka54/{config.h,rules.mk}` - Vial defaults.
+- `qmk/silakka54/{config.h,rules.mk}` - Vial defaults.
 
 ## Platform Requirements
 

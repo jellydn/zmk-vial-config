@@ -48,9 +48,7 @@ None.
 
 ## Function Design
 
-- QMK hooks are small and single-purpose (`combo_should_trigger`, `is_flow_tap_key`,
-  `chordal_hold_handedness`, `keyboard_post_init_user`).
-- Data tables (`default_combos`, `default_key_overrides`) keep the same order as the `.vil`.
+- QMK hooks are small and single-purpose (`combo_should_trigger` in the Silakka54 keymap).
 
 ## Module Design
 

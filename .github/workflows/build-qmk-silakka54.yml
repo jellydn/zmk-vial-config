@@ -16,7 +16,8 @@ on:
 permissions:
   contents: read
 
-# vial-qmk ships the Silakka54 keyboard definition; same revision as the Corne build.
+# vial-qmk ships the Silakka54 keyboard definition; same revision as foostan's
+# Corne v4.1 Vial firmware (foostan/kbd_firmware pins it too).
 env:
   VIAL_QMK_REF: dd43959ae5c08d8a28d38a1acf7b04e86b14a344
 
@@ -54,7 +55,7 @@ jobs:
       # qmk compile also copies the .uf2 to the vial-qmk root; upload-artifact
       # skips the hidden .build/ folder. One .uf2 for both halves. QMK names it
       # after the keymap (silakka54_jellydn), so give it the same style of name
-      # as the Corne (corne-v4.1-vial.uf2).
+      # as the ZMK files (silakka54-zmk-left.uf2).
       - name: Collect firmware
         run: |
           mkdir firmware
