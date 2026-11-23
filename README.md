@@ -213,7 +213,8 @@ Hardware tests are done by hand; CI only checks that each firmware builds. Statu
 1. **Home-row Shift right after a letter:** type `e`, then at once hold `S` and tap `o` → `O`. Do the
    same with `H` and a left-hand letter.
 2. **Tap, then hold (Corne):** tap `A`, then at once hold `A` and tap `C` → Ctrl+C, not `aaa`.
-   The Silakka54 builds (quick tap 200 ms) still repeat the letter.
+   The Silakka54 builds (quick tap 200 ms) still repeat the letter when the second press of `A`
+   comes within 200 ms of the first press; a later press gives Ctrl+C.
 3. **Fast rolls stay letters:** type words with home-row letters fast (`the`, `start`, `sharp`) → no
    mods.
 4. **Thumb layers:** hold `Space` and use Nav arrows (right hand); hold `Bksp` / `Enter` for Num /
