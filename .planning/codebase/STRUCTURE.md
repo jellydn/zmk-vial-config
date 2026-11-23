@@ -21,9 +21,8 @@ zmk-vial-config/
 ├── draw/                     # keymap-drawer config, rendered SVGs, flash diagrams
 ├── nix/                      # nix derivations for dev-shell tools
 ├── qmk/
-│   ├── silakka54/            # Silakka54 Vial keymap
 │   ├── corne-v4.1-graphite.vil  # Corne setup for foostan's stock Vial firmware
-│   └── silakka54-graphite.vil
+│   └── silakka54-graphite.vil   # Silakka54 setup for Squalius-cephalus' stock Vial firmware
 ├── build.yaml                # ZMK build matrix
 ├── Justfile                  # local tasks
 ├── flake.nix / flake.lock    # dev shell
@@ -36,15 +35,14 @@ zmk-vial-config/
 **`config/`:** ZMK configuration. West uses it as the manifest repo (`self.path: config`).
 **`config/boards/shields/silakka54/`:** Kconfig, matrix (`silakka54.dtsi`), physical layout
 (`silakka54-layouts.dtsi`), left/right overlays (right reverses columns, `col-offset = <6>`).
-**`qmk/silakka54/`:** copied into `vial-qmk/keyboards/silakka54/keymaps/jellydn` by CI.
 **`draw/`:** `config.yaml` (keymap-drawer), generated `silakka54.yaml`/`.svg`, hand-made
 `flash-*.svg` used in the README.
 **`nix/`:** packages for keymap-drawer, dts-format, dts-linter, dts-lsp-server, tree-sitter.
 
 ## Key File Locations
 
-**Entry Points:** `config/silakka54.keymap`, `qmk/silakka54/keymap.c`, `qmk/corne-v4.1-graphite.vil`.
-**Configuration:** `build.yaml`, `config/west.yml`, `config/*.conf`, `qmk/*/config.h`, `qmk/*/rules.mk`.
+**Entry Points:** `config/silakka54.keymap`, `qmk/silakka54-graphite.vil`, `qmk/corne-v4.1-graphite.vil`.
+**Configuration:** `build.yaml`, `config/west.yml`, `config/*.conf`.
 **Core Logic:** `config/base.keymap`, `config/combos.dtsi`.
 **Release:** `.github/workflows/release.yml`.
 
@@ -63,7 +61,7 @@ zmk-vial-config/
 ## Where to Add New Code
 
 **New ZMK board:** `config/<board>.keymap` + `.conf`, entry in `build.yaml` (see `AGENTS.md`).
-**Layer/HRM change:** `config/base.keymap`; mirror in the Silakka54 `keymap.c` and both `.vil` if wanted.
+**Layer/HRM change:** `config/base.keymap`; mirror in both `.vil` if wanted.
 **Combo:** `config/combos.dtsi`; for Vial, the `.vil`.
 **Leader sequence:** `config/leader.dtsi`.
 **New Vial board:** `qmk/<board>/` + `qmk/<board>-graphite.vil` + a `build-qmk-<board>.yml`,

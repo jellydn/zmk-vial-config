@@ -82,6 +82,7 @@ key labels define `LN0`.
 | Board settings                    | `config/<board>.conf`                                    |
 | Custom shields                    | `config/boards/shields/<name>/`                          |
 | Corne v4.1 (stock Vial firmware)  | `qmk/corne-v4.1-graphite.vil` only (load it in Vial)     |
+| Silakka54 Vial (stock firmware)   | `qmk/silakka54-graphite.vil` only (load it in Vial)      |
 | Build targets                     | `build.yaml`                                             |
 | Keymap diagram                    | `draw/config.yaml`, `.github/workflows/draw.yml`         |
 | ZMK/module versions               | `config/west.yml` (via `pin-west bump` only)             |

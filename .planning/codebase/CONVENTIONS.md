@@ -42,17 +42,16 @@ None.
 
 **When to comment:**
 - Explain why a value is chosen and how it maps to the other firmware (for example the mouse-key
-  math in `config/base.keymap`, Flow Tap reasoning in `keymap.c`).
+  math in `config/base.keymap`, the home-row-mod settings).
 - Workflows explain triggers and pins in comments.
 - README and comments use short, plain sentences (Simplified Technical English style).
 
 ## Function Design
 
-- QMK hooks are small and single-purpose (`combo_should_trigger` in the Silakka54 keymap).
 
 ## Module Design
 
-- Shared layout lives once per firmware: `config/base.keymap` (ZMK) and one `keymap.c` per Vial board.
+- Shared layout lives once per firmware: `config/base.keymap` (ZMK) and one `.vil` per Vial board.
 - Commit messages use Conventional Commits with a scope: `fix(corne): …`, `ci: …`, `docs: …`,
   `feat(silakka54-vial): …`. Work lands through pull requests merged into `main`.
 

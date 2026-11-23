@@ -3,7 +3,7 @@
 ---
 include:
   # Silakka54: onboard RP2040, wired split (full-duplex UART over TRRS)
-  # artifact-name sets the .uf2 name, in the same style as silakka54-vial.uf2.
+  # artifact-name sets the .uf2 name (silakka54-zmk-left.uf2, silakka54-zmk-right.uf2).
   - board: rpi_pico//zmk
     shield: silakka54_left
     artifact-name: silakka54-zmk-left

@@ -9,10 +9,10 @@ share one layout:
 
 1. Silakka54 on ZMK (`config/`) - the main build (current settings untested; see README "Test status").
 2. Corne v4.1 on foostan's stock Vial firmware + `qmk/corne-v4.1-graphite.vil` (no firmware here).
-3. Silakka54 on QMK/Vial (`qmk/silakka54/` + `qmk/silakka54-graphite.vil`), never tested on hardware.
+3. Silakka54 on Squalius-cephalus' stock Vial firmware (v1.4led) + `qmk/silakka54-graphite.vil`, never tested on hardware.
 
 **Key Characteristics:**
-- The layout is written by hand twice (ZMK devicetree, the Silakka54 `keymap.c`), plus two `.vil`
+- The layout is written by hand once in ZMK devicetree, plus two `.vil`
   files. Nothing generates one from the other; sync is manual.
 - ZMK holds all behavior (combos, HRMs, leader) in the firmware. Vial keeps combos, key overrides,
   macro M0 and QMK Settings in EEPROM; the `.vil` is their source of truth.
@@ -36,10 +36,7 @@ share one layout:
 - Location: `config/boards/shields/silakka54/`.
 - Used by: `build.yaml` (`silakka54_left`, `silakka54_right` on `rpi_pico//zmk`).
 
-**QMK/Vial layer:**
-- Purpose: Vial firmware with default keymap plus small C hooks Vial cannot store.
-- Location: `qmk/silakka54/`.
-- Hooks: `combo_should_trigger` (base layer only).
+**Vial setups:** two `.vil` files in `qmk/` for stock prebuilt Vial firmware; no QMK code.
 
 **CI/release layer:** `.github/workflows/*.yml` (see `INTEGRATIONS.md`).
 
@@ -50,15 +47,10 @@ share one layout:
 2. Zephyr builds `zmk/app` with `-DZMK_CONFIG=config -DSHIELD=silakka54_left|right`.
 3. Output: `silakka54-zmk-left.uf2`, `silakka54-zmk-right.uf2` (artifact `firmware`).
 
-**Vial build:**
-1. Check out vial-qmk at its pinned SHA.
-2. Copy the repo keymap into the keyboard's `keymaps/jellydn/`; `qmk compile`.
-3. Output: `silakka54-vial.uf2` plus the `.vil`, uploaded as an artifact.
-
 **Release:**
-1. `release.yml` on push to `main` calls the two build workflows (`workflow_call`).
-2. Collects `*.uf2`, `*.vil` (plus the Corne `.vil` from `qmk/`), `draw/*.svg`; asserts exactly 3
-   `.uf2`. The release notes link foostan's stock Corne `.uf2`.
+1. `release.yml` on push to `main` calls the ZMK build workflow (`workflow_call`).
+2. Collects the ZMK `*.uf2`, `qmk/*.vil` and `draw/*.svg`; asserts exactly 2 `.uf2`. The release
+   notes link the stock Corne and Silakka54 Vial `.uf2`.
 3. Deletes and recreates the `latest` release and tag at `GITHUB_SHA`.
 
 **Keymap diagram:**
@@ -80,7 +72,6 @@ share one layout:
 ## Entry Points
 
 - `config/silakka54.keymap` - ZMK keymap entry (draw also parses this file).
-- `qmk/silakka54/keymap.c` - Silakka54 Vial keymap.
 - `.github/workflows/release.yml` - end-to-end build and publish.
 - `Justfile` - local tasks (`init`, `build`, `draw`, `bump-west`, `test`).
 
@@ -91,7 +82,7 @@ workflows use `if-no-files-found: error` and a 20-minute timeout.
 
 ## Cross-Cutting Concerns
 
-**Layout parity:** ZMK, both `keymap.c` and both `.vil` must stay in sync by hand.
+**Layout parity:** ZMK and both `.vil` must stay in sync by hand.
 **Tap-hold tuning:** documented in README "Home-row mods" and FAQ; ZMK 280 ms, Vial 200 ms.
 **Vial EEPROM reset:** every new Vial build wipes Vial settings; user must load the `.vil`.
 

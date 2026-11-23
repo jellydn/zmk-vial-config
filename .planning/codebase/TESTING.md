@@ -26,8 +26,7 @@ None in the repo.
 
 CI checks, by workflow:
 - `build-nix.yml` - ZMK compiles for both halves.
-- `build-qmk-silakka54.yml` - Silakka54 Vial firmware compiles; `.uf2` must exist.
-- `release.yml` - exactly 3 `.uf2` files collected (PRs that change `release.yml` run this without
+- `release.yml` - exactly 2 `.uf2` files collected (PRs that change `release.yml` run this without
   publishing).
 - `draw.yml` - keymap parses (`fail_on_error: true`).
 - `test-build-env.yml` - nix shell on 4 platforms: `just init`, `just build silakka54`, `just draw`.
@@ -46,9 +45,8 @@ Not applicable.
 
 **Gaps:**
 - Keymap behavior (HRM timing, combos, leader) is verified only on hardware, by hand.
-- Parity between `config/base.keymap`, the Silakka54 `keymap.c` and both `.vil` is not checked in
-  CI. The Corne has no `keymap.c`: it runs foostan's stock Vial firmware, and the `.vil` is its only
-  source.
+- Parity between `config/base.keymap` and both `.vil` is not checked in CI. Both Vial boards run
+  stock prebuilt firmware; each `.vil` is the only source for its board.
 - Hardware status per build, with dates and the checklist, is in the README section
   "Test status". Summary: none of the current settings is tested on hardware. Silakka54 ZMK was
   last tested on 2026-11-22 with urob's 280/150 settings (before PR #18); its Leader key was never
@@ -64,9 +62,9 @@ layers, combos, shift overrides, Leader, removed keys).
 
 ## Common Patterns
 
-**Verify a ZMK or Silakka54 keymap change:** push a branch; the path-filtered build workflow runs.
+**Verify a ZMK keymap change:** push a branch; the path-filtered build workflow runs.
 Download the artifact or wait for the `latest` release after merge.
-**Verify a Corne `.vil` change:** no build runs (the Corne has no firmware here). Load the `.vil` in
+**Verify a `.vil` change:** no build runs (no Vial firmware is built here). Load the `.vil` in
 Vial on the keyboard; the `latest` release gets it after merge.
 
 ---

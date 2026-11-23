@@ -20,12 +20,12 @@
 - Files: `docs/build-env.md`, `AGENTS.md`, `README.md` (Build section)
 - Status: fixed 2026-11-21; links point at `docs/build-env.md` and the examples use Silakka54.
 
-**Layout written five times by hand:**
-- Issue: `config/base.keymap`, the Silakka54 `keymap.c` and two `.vil`. No generator, no parity
+**Layout written three times by hand:**
+- Issue: `config/base.keymap` and two `.vil`. No generator, no parity
   check in CI.
-- Files: `config/base.keymap`, `qmk/silakka54/keymap.c`, `qmk/*.vil`
+- Files: `config/base.keymap`, `qmk/*.vil`
 - Impact: drift is silent.
-- Fix approach: optional CI script that compares `.vil` and `keymap.c`. Not worth it yet.
+- Fix approach: optional CI script that compares the `.vil` layers with `config/base.keymap`. Not worth it yet.
 
 ## Known Bugs
 
@@ -46,9 +46,6 @@
 - Files: `.github/workflows/build-nix.yml`, `draw.yml`, `bump-west.yml`
 - Current mitigation: trusted upstream authors; build workflow is `contents: read`.
 - Recommendations: pin to SHAs if the upstreams publish tags; dependabot can then bump them.
-
-**Unpinned pip install in Vial builds:** `pip install qmk -r vial-qmk/requirements.txt` takes the
-latest `qmk` CLI (`build-qmk*.yml`). A breaking CLI release would fail the build, not ship bad code.
 
 ## Performance Bottlenecks
 
@@ -72,12 +69,12 @@ Load the `.vil` after every flash (Corne and Silakka54 Vial).
 
 ## Scaling Limits
 
-Release asserts exactly 3 `.uf2`; adding a board needs that number changed.
+Release asserts exactly 2 `.uf2`; adding a board needs that number changed.
 
 ## Dependencies at Risk
 
-**vial-qmk pin and the foostan Corne `.uf2` link:** pinned by SHA in `build-qmk-silakka54.yml`,
-`release.yml` and the README; must be bumped by hand (dependabot does not see them).
+**Stock Vial `.uf2` links:** foostan's Corne `.uf2` (pinned by commit) and Squalius-cephalus'
+Silakka54 v1.4led release asset, in `release.yml` and the README; bumped by hand.
 
 ## Missing Critical Features
 
@@ -86,7 +83,7 @@ None blocking.
 ## Cross-board Inconsistencies (by design or unconfirmed; not changed)
 
 - The stock Corne Vial firmware fires combos on every layer and counts thumbs as their own hand for
-  Chordal Hold; the Silakka54 Vial keymap limits combos to the base layer.
+  Chordal Hold; both stock Vial firmwares fire combos on every layer (ZMK: base layer only).
 - ZMK Nav/Sym/Num carry `&leader`; Vial has no leader (README says so).
 These change keymap behavior, so they need the owner's decision.
 

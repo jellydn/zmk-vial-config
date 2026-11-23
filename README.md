@@ -9,9 +9,9 @@ Miryoku-style thumb layers.
 ![Keymap](draw/silakka54.svg)
 
 **[Download firmware](https://github.com/jellydn/zmk-vial-config/releases/tag/latest)**: every push to
-`main` builds the Silakka54 firmware (ZMK left/right, Vial) and puts the `.uf2` files, both `.vil`
-files and the keymap images in the `latest` release. The Corne runs foostan's stock Vial firmware
-plus `corne-v4.1-graphite.vil`; see [Corne v4.1](#corne-v41-qmkvial).
+`main` builds the Silakka54 ZMK firmware (left/right) and puts the `.uf2` files, both `.vil` files
+and the keymap images in the `latest` release. The Vial builds use stock prebuilt Vial firmware
+plus our `.vil`: [Corne v4.1](#corne-v41-qmkvial) and [Silakka54 Vial](#silakka54-qmkvial).
 
 ## Keyboards
 
@@ -19,7 +19,7 @@ plus `corne-v4.1-graphite.vil`; see [Corne v4.1](#corne-v41-qmkvial).
 | --------- | --------- | ---------------------------------------- | ------------------------------------------- |
 | Silakka54 | supported (current settings untested, see [Test status](#test-status)) | `rpi_pico//zmk` + `silakka54_left/right` | Onboard RP2040, full-duplex wired split     |
 | Corne v4.1 | Vial (stock, untested) | foostan's `crkbd_rev4_1_standard_vial.uf2` + `qmk/corne-v4.1-graphite.vil` | ZMK lacks single-wire (half-duplex) split on RP2040, so it runs Vial |
-| Silakka54 | QMK/Vial (untested) | `silakka54` (see `qmk/silakka54/`) | Same layout as the ZMK build, for Vial users |
+| Silakka54 | Vial (stock, untested) | Squalius-cephalus' [`silakka54_vial_led_LEFT.uf2`](https://github.com/Squalius-cephalus/silakka54/releases/download/v1.4led/silakka54_vial_led_LEFT.uf2) (v1.4led) + `qmk/silakka54-graphite.vil` | Same layout as the ZMK build, for Vial users |
 
 ## Keymap
 
@@ -112,7 +112,7 @@ Tap-Hold**). The Corne `.vil` has the same tap-hold settings and home-row keys a
 | Flow Tap off | Home-row mods are decided by the rules above, also right after a letter. | As in the original `.vil`. At 150 ms, `S`/`H` right after a letter gave a letter, not Shift. | `e`, then `S`↓ `O`↓ `O`↑ → `O`. |
 | Chordal Hold | A hold needs the next key on the *other* hand. | Same-hand rolls stay letters. A same-hand mod needs the full 200 ms. A thumb key counts as its own hand. | `S` `T` (same hand) → `st`. |
 | Combo term 50 ms | Combo keys must go down within 50 ms. | Chords fire, rolls type. Vial has no idle rule, so a very fast `bl` can still give Esc. | `B`+`L` together → Esc. |
-| Base-layer combos | Silakka54 only: combos fire only on the base layer (`combo_should_trigger`). | Stops `.` `-` on Num from firing sticky Meh. The stock Corne firmware fires combos on every layer. | — |
+| Combos on every layer | The stock Vial firmware fires combos on every layer (ZMK: base layer only). | `.` + `-` on Num can start the sticky Meh combo. | — |
 
 **Why does my thumb layer wait ~200 ms?** Hold a thumb key and *hold* the next key (for example
 `Space` + an arrow): the layer turns on only at the 200 ms term. A tapped next key is instant. Vial's
@@ -172,24 +172,29 @@ Compared with the custom Corne firmware this repo built before, the stock firmwa
 ## Silakka54 (QMK/Vial)
 
 > [!WARNING]
-> **The Silakka54 Vial firmware is UNTESTED on hardware.** The ZMK build is the main one for this
+> **The Silakka54 Vial setup is UNTESTED on hardware.** The ZMK build is the main one for this
 > board.
 
-A Vial build of the same layout, next to the ZMK one:
+A Vial setup of the same layout, next to the ZMK one. It runs the board maker's stock Vial firmware,
+Squalius-cephalus' [v1.4led release](https://github.com/Squalius-cephalus/silakka54/releases/tag/v1.4led)
+(2026-05-20, [`silakka54_vial_led_LEFT.uf2`](https://github.com/Squalius-cephalus/silakka54/releases/download/v1.4led/silakka54_vial_led_LEFT.uf2) on both halves, so the left half takes the USB cable). This repo
+keeps only the setup for it:
 
-- `qmk/silakka54/`: QMK keymap with Vial enabled, built on the Silakka54 definition in vial-qmk
-  (RP2040-Zero, full-duplex serial on GP0/GP1). The `Build Silakka54 Vial firmware` workflow builds
-  one `.uf2` for both halves.
-- `qmk/silakka54-graphite.vil`: the full Vial setup: the 6 layers of `config/base.keymap`, the 11
-  combos at 50 ms, the 4 Graphite shift overrides and macro M0 (area screenshot). Load it in Vial
-  after you flash; see [How to flash](#silakka54-vial).
+- `qmk/silakka54-graphite.vil`: the 6 layers of `config/base.keymap`, the 11 combos at 50 ms, the 4
+  Graphite shift overrides, macro M0 (area screenshot) and the QMK Settings (Flow Tap off). Load it
+  in Vial after every flash; see [How to flash](#silakka54-vial).
 
-As on the Corne, the `.vil` is the single source of truth for combos, key overrides, macro M0 and
-QMK Settings, and Vial erases them on the first boot of every new build. **Load the `.vil` after
-every flash.** `keymap.c` matches the `.vil` layers key for key and only adds one thing Vial cannot
-store: combos fire on the base layer only. Flow Tap is off, as on the Corne (see
-[Home-row mods](#home-row-mods)); an older `.vil` still sets it to 150 ms. The board has no LEDs to set. There is no Leader or
-bootloader key; enter the bootloader with the buttons or bootmagic.
+The stock firmware has the same Vial UID, 8 layers (the `.vil` uses 6), the same full-duplex split on
+GP0/GP1 and Chordal Hold / Flow Tap in its QMK Settings, so the `.vil` loads as is. Compared with the
+custom Silakka54 Vial firmware this repo built before, it:
+
+- fires combos on every layer, so `.` + `-` on Num can start the sticky Meh combo;
+- has no bootmagic key on the right half (only the left outer top key); to flash, press BOOT, or
+  press RESET twice quickly (double-tap reset);
+- lights the controller's LED for the active layer (none on the base layer) and red for Caps Lock or
+  Caps Word (v1.4led).
+
+There is no Leader key on Vial.
 
 ## Test status
 
@@ -198,7 +203,7 @@ Hardware tests are done by hand; CI only checks that each firmware builds. Statu
 | Build | Firmware file | Current settings | Tested on hardware | Untested |
 | --- | --- | --- | --- | --- |
 | Silakka54 ZMK | `silakka54-zmk-left.uf2`, `silakka54-zmk-right.uf2` (release) | Home-row mods: 200 ms, `balanced`, other-hand hold-trigger on release, quick tap 200 ms, no `require-prior-idle-ms` (PR #18). Combos: 50 ms, 150 ms idle. Leader `B O O T` / `R E S E T` (PR #4) | 2026-11-22, firmware with urob's 280 ms term and 150 ms idle rule (before PR #18): it types, and home-row Shift waits after a letter (the reason for PR #18) | Everything with the PR #18 settings. The Leader key (PR #4 left its hardware checks open) |
-| Silakka54 Vial | `silakka54-vial.uf2` + `silakka54-graphite.vil` | 200 ms, Permissive Hold, Chordal Hold, Flow Tap off (PR #17), quick tap 200 ms; combos 50 ms, base layer only | Nothing | Everything, also flashing and both halves working |
+| Silakka54 Vial | Squalius-cephalus' v1.4led [`silakka54_vial_led_LEFT.uf2`](https://github.com/Squalius-cephalus/silakka54/releases/download/v1.4led/silakka54_vial_led_LEFT.uf2) (both halves) + `silakka54-graphite.vil` | 200 ms, Permissive Hold, Chordal Hold, Flow Tap off, quick tap 200 ms; combos 50 ms on every layer | Nothing | Everything, also flashing and both halves working |
 | Corne v4.1 | foostan's [`crkbd_rev4_1_standard_vial.uf2`](https://github.com/foostan/kbd_firmware/raw/7e94242f7474761609d7ec16df0872a9785c2ccb/keyboards/crkbd/vial-kb/vial-qmk/.build/crkbd_rev4_1_standard_vial.uf2) + `corne-v4.1-graphite.vil` | The same QMK Settings as the Silakka54 Vial `.vil` and the dotfiles `.vil`; combos on every layer; thumbs count as their own hand | Only the old custom firmware (2026-11-21, from `main`, Flow Tap 150 ms): `Space` for Nav after typing, combos, Graphite shift overrides and M0 worked. Later its home-row Shift waited after a letter (fixed by Flow Tap off, PR #16) | Everything on the stock firmware (PR #21) |
 
 **Checklist after a flash** (load the `.vil` first on Vial builds):
@@ -223,7 +228,7 @@ Every push or pull request that touches `config/**` or `build.yaml` builds the f
 Actions (`Build ZMK firmware (nix)`).
 
 For a local build environment, see [docs/build-env.md](docs/build-env.md) (`just init`, then
-`just build silakka54`). The Vial firmware builds only in GitHub Actions.
+`just build silakka54`). This repo builds no Vial firmware; the Vial builds use stock `.uf2` files.
 
 ## How to flash
 
@@ -284,23 +289,24 @@ just restarts that half.
 > [!WARNING]
 > UNTESTED on hardware. If it does not work, flash the [ZMK firmware](#silakka54-zmk) again.
 
-The buttons are the same as for ZMK (see the diagram above). The Vial firmware also has bootmagic:
-hold the **outer top key** of a half (`` ` `` on the left, `⏩` on the right) while you plug the USB
-cable into that half.
+The buttons are the same as for ZMK (see the diagram above). With Vial firmware already on a half,
+pressing RESET twice quickly also opens the bootloader. Bootmagic works on the left half only: hold
+the outer top key (`` ` ``) while you plug in the USB cable.
 
-1. In the Actions tab, filter `Build Silakka54 Vial firmware` by your branch (`main` once merged),
-   open the green run for the commit you want, and download the `silakka54-vial` artifact. It holds
-   `silakka54-vial.uf2` and `silakka54-graphite.vil`. Both halves use the same `.uf2`.
+1. Download Squalius-cephalus' [`silakka54_vial_led_LEFT.uf2`](https://github.com/Squalius-cephalus/silakka54/releases/download/v1.4led/silakka54_vial_led_LEFT.uf2) (v1.4led) and `silakka54-graphite.vil`
+   from the [latest release](https://github.com/jellydn/zmk-vial-config/releases/tag/latest). Both
+   halves use the `LEFT` file: it is built with `MASTER_LEFT`, so the half with USB is the left
+   half (the maker's v1.1 release notes; his wiki suggests the `RIGHT` file on the right half).
 2. Unplug the USB cable, then unplug the TRRS cable between the halves.
-3. Left half: hold BOOT (or the outer top key) and plug the USB cable into the left half, then let
-   go. A drive named `RPI-RP2` opens. Copy `silakka54-vial.uf2` to it; the drive closes by
-   itself when the flash is done.
+3. Left half: hold BOOT and plug the USB cable into the left half, then let go. A drive named
+   `RPI-RP2` opens. Copy `silakka54_vial_led_LEFT.uf2` to it; the drive closes by itself when the flash
+   is done.
 4. Unplug the USB cable. Do step 3 on the right half with the same file.
 5. With the USB cable unplugged, connect the TRRS cable.
-6. Plug the USB cable into the **left** half. QMK treats the half with USB as the left half.
+6. Plug the USB cable into the **left** half.
 7. Open [Vial](https://get.vial.today) (desktop app or web), choose **File → Load saved layout** and
-   pick `silakka54-graphite.vil`. Without this step there are **no combos**, no Graphite shift
-   symbols and no M0 screenshot macro. Do it again after every new flash.
+   pick `silakka54-graphite.vil`. Without this step the keyboard has the stock layout and **no
+   combos**, Graphite shift symbols, M0 macro or tap-hold settings. Do it again after every flash.
 
 To go back to ZMK, put each half in the bootloader the same way and copy its ZMK `.uf2`.
 
