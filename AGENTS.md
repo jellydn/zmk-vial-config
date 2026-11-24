@@ -29,7 +29,7 @@ and the build pipeline, see the [README](README.md).
   `draw/silakka54.svg`). The `Draw keymap` workflow also renders and commits it on push.
 - The Silakka54 left half builds with ZMK Studio (`studio-rpc-usb-uart` snippet and
   `CONFIG_ZMK_STUDIO=y` in `build.yaml`), which needs the `zephyr-full` toolchain in
-  `build-nix.yml`. Studio edits saved on the keyboard override `base.keymap` until "Restore Stock
+  `build-nix.yml`. Keys saved in Studio override the same keys in `base.keymap` until "Restore Stock
   Settings", so a keymap change in this repo may not show on a keyboard that was edited in Studio.
   Studio cannot change combos, hold-tap timings or Leader sequences.
 - `just test` is a snapshot-test harness for developing the ZMK **modules** checked out under
@@ -89,7 +89,7 @@ key labels define `LN0`.
 | Corne v4.1 (stock Vial firmware)  | `qmk/corne-v4.1-graphite.vil` only (load it in Vial)     |
 | Silakka54 Vial (stock firmware)   | `qmk/silakka54-graphite.vil` only (load it in Vial); v1.4led `LEFT`/`RIGHT` `.uf2` links in `release.yml` and README |
 | Build targets                     | `build.yaml`                                             |
-| ZMK Studio (Silakka54 left half)  | `build.yaml` (snippet, `CONFIG_ZMK_STUDIO`), `&studio_unlock` on Fn in `config/base.keymap`, physical layout in `config/boards/shields/silakka54/silakka54-layouts.dtsi` |
+| ZMK Studio (Silakka54 left half)  | `build.yaml` (snippet, `CONFIG_ZMK_STUDIO`), `&studio_unlock` on Mouse in `config/base.keymap`, physical layout in `config/boards/shields/silakka54/silakka54-layouts.dtsi` |
 | Keymap diagram                    | `draw/config.yaml`, `.github/workflows/draw.yml`         |
 | ZMK/module versions               | `config/west.yml` (via `pin-west bump` only)             |
 | Dev environment                   | `flake.nix`, `nix/` (test with `nix develop`)            |

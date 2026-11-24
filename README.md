@@ -28,8 +28,8 @@ plus our `.vil`: [Corne v4.1](#corne-v41-qmkvial) and [Silakka54 Vial](#silakka5
   [Home-row mods](#home-row-mods) and the [FAQ](#faq-tap-hold-settings).
 - **Thumbs** (left to right): `=`, `Space`/Nav, `Tab`/Mouse, `Enter`/Sym, `Bksp`/Num, `;`.
 - **Layers**: Nav (arrows, Home/End, PgUp/PgDn), Mouse (mouse keys, Cmd shortcuts, one-shot Fn),
-  Sym (shifted Num), Num (numpad), Fn (F-keys, media, `Studio Unlock` on the outer bottom-left key
-  for [ZMK Studio](#zmk-studio-silakka54-zmk)). `Lock` keeps the current layer on until you
+  Sym (shifted Num), Num (numpad), Fn (F-keys, media). Mouse has `Studio Unlock` on the outer
+  bottom-left key for [ZMK Studio](#zmk-studio-silakka54-zmk). `Lock` keeps the current layer on until you
   press it again.
 - **Combos** (base layer only):
 
@@ -213,8 +213,8 @@ flash. The right half has no Studio; it sends its keys to the left half as befor
 2. Open <https://zmk.studio/> in Chrome or Edge (they have Web Serial; Firefox and Safari do not), or
    use the [desktop app](https://zmk.studio/download). Click **USB** and select the Silakka54.
    On Linux you may need to be in the `dialout` or `uucp` group to open the serial port.
-3. Unlock the keyboard when Studio asks: hold `Tab` (Mouse), tap the inner bottom-left key (one-shot
-   Fn), let go, then tap the outer bottom-left key (`Studio Unlock`).
+3. Unlock the keyboard when Studio asks: hold `Tab` (Mouse) and tap the outer bottom-left key
+   (`Studio Unlock`).
 
 **What Studio cannot change.** These stay in this repo and need a new flash:
 
@@ -224,13 +224,23 @@ flash. The right half has no Studio; it sends its keys to the left half as befor
 - Leader sequences (`config/leader.dtsi`), mouse key speeds and the Graphite shifted pairs;
 - the number of layers (6) and the physical layout.
 
-Studio can assign the existing behaviors (also `&hml`, `&hmr`, `&leader`) to any key.
+Studio can assign the existing behaviors to any key, also `&hml` and `&hmr`. It cannot assign
+`&leader` to a new key: the Leader module gives Studio no parameter data, so Studio refuses it. The
+`&leader` keys already in the keymap keep working.
 
 > [!IMPORTANT]
-> Studio saves its changes on the left half, and they override `config/base.keymap`. After you
-> change a key in Studio, a new firmware with an edited `base.keymap` does not change that keymap
-> until you click **Restore Stock Settings** in Studio. Keymap changes made in Studio also do not
-> show in `draw/silakka54.svg`.
+> Studio saves each key you change (and layer names) on the left half. A saved key overrides the
+> same key in `config/base.keymap`, also after you flash a new firmware. Changes in `base.keymap` to
+> keys you did not change in Studio still take effect. To go back to `base.keymap` for every key,
+> click **Restore Stock Settings** in Studio. Studio changes do not show in `draw/silakka54.svg`.
+
+> [!WARNING]
+> Keep at least one `Studio Unlock` key. Without one, you cannot unlock Studio again, also not for
+> **Restore Stock Settings**, and a new flash keeps the saved keys. To recover, flash ZMK's
+> `settings_reset` firmware to the left half: on a branch, add `- board: rpi_pico//zmk` with `shield:
+> settings_reset` to `build.yaml`, then take the third `.uf2` from CI or run `just build
+> settings_reset` (do not merge it: the release expects two `.uf2` files). Copy it to the left half
+> like a normal flash, then flash `silakka54-zmk-left.uf2` again. This erases all Studio changes.
 
 ## Test status
 
@@ -259,7 +269,7 @@ Hardware tests are done by hand; CI only checks that each firmware builds. Statu
    `RPI-RP2` drive. Right half (USB in the right half): hold `Space`, tap the outer bottom-right key,
    type `B O O T`. `R E S E T` restarts the half.
 8. **ZMK Studio (Silakka54 ZMK only):** with USB in the left half, connect at <https://zmk.studio/>,
-   unlock with the `Studio Unlock` key, change one key, test it, then click **Restore Stock
+   unlock with `Tab` + the outer bottom-left key, change one key, test it, then click **Restore Stock
    Settings** and check that the key is back.
 9. **Removed keys (Corne):** Nav has no Fn key on the left inner home-row key, Mouse has no Caps Lock, and the
    Sym/Num right thumbs do nothing.
