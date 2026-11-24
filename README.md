@@ -238,9 +238,9 @@ Studio can assign the existing behaviors to any key, also `&hml` and `&hmr`. It 
 > Keep at least one `Studio Unlock` key. Without one, you cannot unlock Studio again, also not for
 > **Restore Stock Settings**, and a new flash keeps the saved keys. To recover, flash ZMK's
 > `settings_reset` firmware to the left half: on a branch, add `- board: rpi_pico//zmk` with `shield:
-> settings_reset` to `build.yaml`, then take the third `.uf2` from CI or run `just build
-> settings_reset` (do not merge it: the release expects two `.uf2` files). Copy it to the left half
-> like a normal flash, then flash `silakka54-zmk-left.uf2` again. This erases all Studio changes.
+> settings_reset` and `artifact-name: settings-reset` to `build.yaml`, then take `settings-reset.uf2`
+> from CI or run `just build settings_reset` (do not merge it: the release expects two `.uf2` files).
+> Copy `settings-reset.uf2` to the left half like a normal flash, then flash `silakka54-zmk-left.uf2` again. This erases all Studio changes.
 
 ## Test status
 
