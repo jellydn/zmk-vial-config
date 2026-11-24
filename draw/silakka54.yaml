@@ -276,8 +276,8 @@ layers:
   - {type: held}
   - ''
   Fn: ['', '', '', '', '', '', '', '', '', '', '', '', '', F12, F7, F8, F9, '$$mdi:volume-off$$', '', '$$mdi:skip-backward$$', '$$mdi:play-pause$$', '$$mdi:skip-forward$$',
-    '', '', '', F11, F4, F5, F6, '$$mdi:volume-high$$', '', Shift, Ctrl, Alt, Gui, '', '', F10, F1, F2, F3, '$$mdi:volume-medium$$', '', '', '', '', '', '', F13,
-    Spc, Tab, '', '', Lock]
+    '', '', '', F11, F4, F5, F6, '$$mdi:volume-high$$', '', Shift, Ctrl, Alt, Gui, '', Studio Unlock, F10, F1, F2, F3, '$$mdi:volume-medium$$', '', '', '', '', '',
+    '', F13, Spc, Tab, '', '', Lock]
 combos:
 - p: [13, 14]
   k: Esc
