@@ -23,6 +23,7 @@ parse_config:
     "&gr_fslh": { "t": "/", "s": "<" }
     "&sl 5": { "t": "Fn", "h": "one-shot" }
     "&leader": Leader
+    "&studio_unlock": Studio Unlock
     "&tog 1": Lock
     "&tog 2": Lock
     "&tog 5": Lock

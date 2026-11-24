@@ -4,9 +4,12 @@
 include:
   # Silakka54: onboard RP2040, wired split (full-duplex UART over TRRS)
   # artifact-name sets the .uf2 name (silakka54-zmk-left.uf2, silakka54-zmk-right.uf2).
+  # ZMK Studio runs on the central (left) half only, which has the USB link.
   - board: rpi_pico//zmk
     shield: silakka54_left
     artifact-name: silakka54-zmk-left
+    snippet: studio-rpc-usb-uart
+    cmake-args: -DCONFIG_ZMK_STUDIO=y
   - board: rpi_pico//zmk
     shield: silakka54_right
     artifact-name: silakka54-zmk-right

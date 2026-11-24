@@ -17,7 +17,7 @@ plus our `.vil`: [Corne v4.1](#corne-v41-qmkvial) and [Silakka54 Vial](#silakka5
 
 | Keyboard  | Status    | Build target                             | Notes                                       |
 | --------- | --------- | ---------------------------------------- | ------------------------------------------- |
-| Silakka54 | supported (current settings untested, see [Test status](#test-status)) | `rpi_pico//zmk` + `silakka54_left/right` | Onboard RP2040, full-duplex wired split     |
+| Silakka54 | supported (current settings untested, see [Test status](#test-status)) | `rpi_pico//zmk` + `silakka54_left/right` | Onboard RP2040, full-duplex wired split, [ZMK Studio](#zmk-studio-silakka54-zmk) on the left half (untested) |
 | Corne v4.1 | Vial (stock, untested) | foostan's `crkbd_rev4_1_standard_vial.uf2` + `qmk/corne-v4.1-graphite.vil` | ZMK lacks single-wire (half-duplex) split on RP2040, so it runs Vial |
 | Silakka54 | Vial (stock, untested) | Squalius-cephalus' v1.4led [`silakka54_vial_led_LEFT.uf2`](https://github.com/Squalius-cephalus/silakka54/releases/download/v1.4led/silakka54_vial_led_LEFT.uf2) (left half) and [`silakka54_vial_led_RIGHT.uf2`](https://github.com/Squalius-cephalus/silakka54/releases/download/v1.4led/silakka54_vial_led_RIGHT.uf2) (right half) + `qmk/silakka54-graphite.vil` | Same layout as the ZMK build, for Vial users |
 
@@ -28,7 +28,8 @@ plus our `.vil`: [Corne v4.1](#corne-v41-qmkvial) and [Silakka54 Vial](#silakka5
   [Home-row mods](#home-row-mods) and the [FAQ](#faq-tap-hold-settings).
 - **Thumbs** (left to right): `=`, `Space`/Nav, `Tab`/Mouse, `Enter`/Sym, `Bksp`/Num, `;`.
 - **Layers**: Nav (arrows, Home/End, PgUp/PgDn), Mouse (mouse keys, Cmd shortcuts, one-shot Fn),
-  Sym (shifted Num), Num (numpad), Fn (F-keys, media). `Lock` keeps the current layer on until you
+  Sym (shifted Num), Num (numpad), Fn (F-keys, media, `Studio Unlock` on the outer bottom-left key
+  for [ZMK Studio](#zmk-studio-silakka54-zmk)). `Lock` keeps the current layer on until you
   press it again.
 - **Combos** (base layer only):
 
@@ -199,13 +200,45 @@ custom Silakka54 Vial firmware this repo built before, it:
 
 There is no Leader key on Vial.
 
+## ZMK Studio (Silakka54 ZMK)
+
+The left (central) half of the Silakka54 ZMK firmware supports [ZMK Studio](https://zmk.studio/).
+Studio changes the keys on each layer and renames layers while the keyboard runs, without a new
+flash. The right half has no Studio; it sends its keys to the left half as before.
+
+**Connect**
+
+1. Plug the USB cable into the **left** half. Studio talks to the left half only, over USB (the
+   RP2040 has no Bluetooth).
+2. Open <https://zmk.studio/> in Chrome or Edge (they have Web Serial; Firefox and Safari do not), or
+   use the [desktop app](https://zmk.studio/download). Click **USB** and select the Silakka54.
+   On Linux you may need to be in the `dialout` or `uucp` group to open the serial port.
+3. Unlock the keyboard when Studio asks: hold `Tab` (Mouse), tap the inner bottom-left key (one-shot
+   Fn), let go, then tap the outer bottom-left key (`Studio Unlock`).
+
+**What Studio cannot change.** These stay in this repo and need a new flash:
+
+- combos (`config/combos.dtsi`) and their timing;
+- hold-tap timings: the home-row mods (200 ms, `balanced`, other-hand trigger, quick tap 200 ms, no
+  `require-prior-idle-ms`) and the thumb layer-taps;
+- Leader sequences (`config/leader.dtsi`), mouse key speeds and the Graphite shifted pairs;
+- the number of layers (6) and the physical layout.
+
+Studio can assign the existing behaviors (also `&hml`, `&hmr`, `&leader`) to any key.
+
+> [!IMPORTANT]
+> Studio saves its changes on the left half, and they override `config/base.keymap`. After you
+> change a key in Studio, a new firmware with an edited `base.keymap` does not change that keymap
+> until you click **Restore Stock Settings** in Studio. Keymap changes made in Studio also do not
+> show in `draw/silakka54.svg`.
+
 ## Test status
 
-Hardware tests are done by hand; CI only checks that each firmware builds. Status on 2026-11-23:
+Hardware tests are done by hand; CI only checks that each firmware builds. Status on 2026-11-24:
 
 | Build | Firmware file | Current settings | Tested on hardware | Untested |
 | --- | --- | --- | --- | --- |
-| Silakka54 ZMK | `silakka54-zmk-left.uf2`, `silakka54-zmk-right.uf2` (release) | Home-row mods: 200 ms, `balanced`, other-hand hold-trigger on release, quick tap 200 ms, no `require-prior-idle-ms` (PR #18). Combos: 50 ms, 150 ms idle. Leader `B O O T` / `R E S E T` (PR #4) | 2026-11-22, firmware with urob's 280 ms term and 150 ms idle rule (before PR #18): it types, and home-row Shift waits after a letter (the reason for PR #18) | Everything with the PR #18 settings. The Leader key (PR #4 left its hardware checks open) |
+| Silakka54 ZMK | `silakka54-zmk-left.uf2`, `silakka54-zmk-right.uf2` (release) | Home-row mods: 200 ms, `balanced`, other-hand hold-trigger on release, quick tap 200 ms, no `require-prior-idle-ms` (PR #18). Combos: 50 ms, 150 ms idle. Leader `B O O T` / `R E S E T` (PR #4) | 2026-11-22, firmware with urob's 280 ms term and 150 ms idle rule (before PR #18): it types, and home-row Shift waits after a letter (the reason for PR #18) | Everything with the PR #18 settings. The Leader key (PR #4 left its hardware checks open). ZMK Studio: connect, unlock, edit a key, Restore Stock Settings |
 | Silakka54 Vial | Squalius-cephalus' v1.4led [`silakka54_vial_led_LEFT.uf2`](https://github.com/Squalius-cephalus/silakka54/releases/download/v1.4led/silakka54_vial_led_LEFT.uf2) (left half) and [`silakka54_vial_led_RIGHT.uf2`](https://github.com/Squalius-cephalus/silakka54/releases/download/v1.4led/silakka54_vial_led_RIGHT.uf2) (right half) + `silakka54-graphite.vil` | 200 ms, Permissive Hold, Chordal Hold, Flow Tap off, quick tap 200 ms; combos 50 ms on every layer | Nothing | Everything, also flashing and both halves working |
 | Corne v4.1 | foostan's [`crkbd_rev4_1_standard_vial.uf2`](https://github.com/foostan/kbd_firmware/raw/7e94242f7474761609d7ec16df0872a9785c2ccb/keyboards/crkbd/vial-kb/vial-qmk/.build/crkbd_rev4_1_standard_vial.uf2) + `corne-v4.1-graphite.vil` | The same QMK Settings as the Silakka54 Vial `.vil` and the dotfiles `.vil`, except quick tap 0 (not 200); combos on every layer; thumbs count as their own hand | Only the old custom firmware (2026-11-21, from `main`, Flow Tap 150 ms): `Space` for Nav after typing, combos, Graphite shift overrides and M0 worked. Later its home-row Shift waited after a letter (fixed by Flow Tap off, PR #16) | Everything on the stock firmware (PR #21) |
 
@@ -225,7 +258,10 @@ Hardware tests are done by hand; CI only checks that each firmware builds. Statu
 7. **Leader (ZMK only):** left half: hold `Bksp`, tap the outer bottom-left key, type `B O O T` →
    `RPI-RP2` drive. Right half (USB in the right half): hold `Space`, tap the outer bottom-right key,
    type `B O O T`. `R E S E T` restarts the half.
-8. **Removed keys (Corne):** Nav has no Fn key on the left inner home-row key, Mouse has no Caps Lock, and the
+8. **ZMK Studio (Silakka54 ZMK only):** with USB in the left half, connect at <https://zmk.studio/>,
+   unlock with the `Studio Unlock` key, change one key, test it, then click **Restore Stock
+   Settings** and check that the key is back.
+9. **Removed keys (Corne):** Nav has no Fn key on the left inner home-row key, Mouse has no Caps Lock, and the
    Sym/Num right thumbs do nothing.
 
 ## Build

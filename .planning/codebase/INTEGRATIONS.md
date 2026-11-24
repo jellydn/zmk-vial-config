@@ -47,7 +47,8 @@
 **Hosting:** GitHub (jellydn/zmk-vial-config).
 
 **CI Pipeline (`.github/workflows/`):**
-- `build-nix.yml` - ZMK build; push/PR on `config/**`, `build.yaml`; also `workflow_call`.
+- `build-nix.yml` - ZMK build with the `zephyr-full` toolchain (ZMK Studio needs it); push/PR on
+  `config/**`, `build.yaml`; also `workflow_call`.
 - `release.yml` - calls the ZMK build and publishes the `latest` release on push to `main`.
 - `draw.yml` - renders and commits `draw/silakka54.svg` on keymap pushes.
 - `bump-west.yml` - Mondays 05:00 UTC, opens a pin-west bump PR.

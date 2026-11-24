@@ -64,7 +64,8 @@
 - `.envrc` activates the nix flake via direnv; `flake.nix` exports `ZMK_BUILD_DIR`, `ZMK_SRC_DIR`.
 
 **Build:**
-- `build.yaml` - ZMK build matrix (Silakka54 left/right).
+- `build.yaml` - ZMK build matrix (Silakka54 left/right). The left (central) target adds the
+  `studio-rpc-usb-uart` snippet and `-DCONFIG_ZMK_STUDIO=y` for ZMK Studio.
 - `config/silakka54.conf` - `CONFIG_ZMK_POINTING=y`.
 
 ## Platform Requirements
