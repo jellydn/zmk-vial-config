@@ -1,0 +1,21 @@
+name: Build ZMK firmware
+on:
+  workflow_dispatch:
+  workflow_call: # used by release.yml
+  push:
+    paths:
+      - config/**
+      - build.yaml
+  pull_request:
+    paths:
+      - config/**
+      - build.yaml
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    # ZMK's official Docker build. Its image has protoc/grpcio-tools, which
+    # ZMK Studio (silakka54_left) needs to compile its protobuf messages.
+    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main

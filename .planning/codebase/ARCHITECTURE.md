@@ -43,7 +43,7 @@ share one layout:
 ## Data Flow
 
 **ZMK build:**
-1. `build.yaml` matrix → reusable `urob/zmk-actions` workflow → west fetches `config/west.yml` pins.
+1. `build.yaml` matrix → ZMK's reusable Docker workflow (`zmkfirmware/zmk`) → west fetches `config/west.yml` pins.
 2. Zephyr builds `zmk/app` with `-DZMK_CONFIG=config -DSHIELD=silakka54_left|right`.
 3. Output: `silakka54-zmk-left.uf2`, `silakka54-zmk-right.uf2` (artifact `firmware`).
 

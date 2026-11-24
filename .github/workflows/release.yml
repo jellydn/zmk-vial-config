@@ -20,7 +20,7 @@ concurrency:
 
 jobs:
   zmk:
-    uses: ./.github/workflows/build-nix.yml
+    uses: ./.github/workflows/build.yml
 
   release:
     needs: [zmk]

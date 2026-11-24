@@ -277,10 +277,12 @@ Hardware tests are done by hand; CI only checks that each firmware builds. Statu
 ## Build
 
 Every push or pull request that touches `config/**` or `build.yaml` builds the firmware in GitHub
-Actions (`Build ZMK firmware (nix)`).
+Actions (`Build ZMK firmware`, ZMK's official Docker build).
 
 For a local build environment, see [docs/build-env.md](docs/build-env.md) (`just init`, then
-`just build silakka54`). This repo builds no Vial firmware; the Vial builds use stock `.uf2` files.
+`just build silakka54`). The left half (ZMK Studio) also needs the Python packages `protobuf` and
+`grpcio-tools`, which the nix dev shell does not have yet; without them its build stops at nanopb's
+`protoc` step. This repo builds no Vial firmware; the Vial builds use stock `.uf2` files.
 
 ## How to flash
 
@@ -314,7 +316,7 @@ just restarts that half.
 
 **Steps** (with the BOOT button)
 
-1. In the Actions tab, filter `Build ZMK firmware (nix)` by your branch (`main` once merged), open
+1. In the Actions tab, filter `Build ZMK firmware` by your branch (`main` once merged), open
    the green run for the commit you want, and download the `firmware` artifact. It holds
    `silakka54-zmk-left.uf2` and `silakka54-zmk-right.uf2`.
 2. Unplug the USB cable, then unplug the TRRS cable between the halves.

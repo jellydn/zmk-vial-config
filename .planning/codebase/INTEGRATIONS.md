@@ -11,7 +11,7 @@
 - foostan/kbd_firmware - stock Corne v4.1 Vial `.uf2`, linked (`CORNE_UF2_URL` in `release.yml`, README)
 
 **Reusable GitHub workflows (unpinned, `@main`):**
-- `urob/zmk-actions/.github/workflows/build-user-config.yml` - ZMK build (`build-nix.yml`)
+- `zmkfirmware/zmk/.github/workflows/build-user-config.yml` - ZMK build in Docker (`build.yml`)
 - `caksoylar/keymap-drawer/.github/workflows/draw-zmk.yml` - keymap SVG (`draw.yml`)
 - `urob/pin-west@main` action - weekly west bump PR (`bump-west.yml`)
 
@@ -47,8 +47,8 @@
 **Hosting:** GitHub (jellydn/zmk-vial-config).
 
 **CI Pipeline (`.github/workflows/`):**
-- `build-nix.yml` - ZMK build with the `zephyr-full` toolchain (ZMK Studio needs it); push/PR on
-  `config/**`, `build.yaml`; also `workflow_call`.
+- `build.yml` - ZMK build with ZMK's official Docker workflow (its image has `protoc` for ZMK
+  Studio); push/PR on `config/**`, `build.yaml`; also `workflow_call`.
 - `release.yml` - calls the ZMK build and publishes the `latest` release on push to `main`.
 - `draw.yml` - renders and commits `draw/silakka54.svg` on keymap pushes.
 - `bump-west.yml` - Mondays 05:00 UTC, opens a pin-west bump PR.

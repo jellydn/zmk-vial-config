@@ -9,7 +9,9 @@
   workflow, but only on `workflow_dispatch` (push trigger commented out). Nothing calls it.
 - Files: `.github/workflows/build.yml`
 - Impact: two "Build ZMK firmware" entries in the Actions tab; confusing for flash guides.
-- Status: fixed 2026-11-21, file deleted; `build-nix.yml` is the build that `release.yml` uses.
+- Status: fixed 2026-11-21, file deleted; `build-nix.yml` was the build that `release.yml` used.
+  2026-11-24: `build-nix.yml` was renamed to `build.yml` and now calls ZMK's official Docker
+  workflow (urob's nix shells cannot build ZMK Studio: no `protoc`). It is again the only build.
 
 **Stale local-build guide copied from urob:**
 - Issue: mentions urob's Corneish Zen targets, `draw/base.svg` / `draw/overview.svg` (the repo
@@ -41,9 +43,9 @@
 ## Security Considerations
 
 **Unpinned reusable workflows:**
-- Risk: `urob/zmk-actions@main`, `caksoylar/keymap-drawer@main`, `urob/pin-west@main` run with
+- Risk: `zmkfirmware/zmk@main` (build), `caksoylar/keymap-drawer@main`, `urob/pin-west@main` run with
   this repo's token; `draw.yml` and `bump-west.yml` have `contents: write`.
-- Files: `.github/workflows/build-nix.yml`, `draw.yml`, `bump-west.yml`
+- Files: `.github/workflows/build.yml`, `draw.yml`, `bump-west.yml`
 - Current mitigation: trusted upstream authors; build workflow is `contents: read`.
 - Recommendations: pin to SHAs if the upstreams publish tags; dependabot can then bump them.
 

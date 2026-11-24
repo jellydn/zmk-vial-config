@@ -25,7 +25,7 @@ None in the repo.
 ## Test Structure
 
 CI checks, by workflow:
-- `build-nix.yml` - ZMK compiles for both halves.
+- `build.yml` - ZMK compiles for both halves (ZMK's Docker workflow).
 - `release.yml` - exactly 2 `.uf2` files collected (PRs that change `release.yml` run this without
   publishing).
 - `draw.yml` - keymap parses (`fail_on_error: true`).
