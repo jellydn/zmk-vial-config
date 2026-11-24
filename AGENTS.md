@@ -29,8 +29,8 @@ and the build pipeline, see the [README](README.md).
   `draw/silakka54.svg`). The `Draw keymap` workflow also renders and commits it on push.
 - The Silakka54 left half builds with ZMK Studio (`studio-rpc-usb-uart` snippet and
   `CONFIG_ZMK_STUDIO=y` in `build.yaml`). Studio compiles protobuf messages with nanopb, so the
-  build needs `protoc` (Python `protobuf` + `grpcio-tools`): ZMK's Docker image has it, the nix dev
-  shell does not, so a local `just build` of the left half fails until `flake.nix` adds them. Keys saved in Studio override the same keys in `base.keymap` until "Restore Stock
+  build needs `protoc` (Python `protobuf` + `grpcio-tools`): ZMK's Docker image has it, and
+  `flake.nix` adds both to the dev shell's Python environment. Keys saved in Studio override the same keys in `base.keymap` until "Restore Stock
   Settings", so a keymap change in this repo may not show on a keyboard that was edited in Studio.
   Studio cannot change combos, hold-tap timings or Leader sequences.
 - `just test` is a snapshot-test harness for developing the ZMK **modules** checked out under

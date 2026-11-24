@@ -280,9 +280,8 @@ Every push or pull request that touches `config/**` or `build.yaml` builds the f
 Actions (`Build ZMK firmware`, ZMK's official Docker build).
 
 For a local build environment, see [docs/build-env.md](docs/build-env.md) (`just init`, then
-`just build silakka54`). The left half (ZMK Studio) also needs the Python packages `protobuf` and
-`grpcio-tools`, which the nix dev shell does not have yet; without them its build stops at nanopb's
-`protoc` step. This repo builds no Vial firmware; the Vial builds use stock `.uf2` files.
+`just build silakka54`). The dev shell includes `grpcio-tools`, which the ZMK Studio build of the left
+half needs. This repo builds no Vial firmware; the Vial builds use stock `.uf2` files.
 
 ## How to flash
 

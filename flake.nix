@@ -25,6 +25,11 @@
       system: let
         pkgs = nixpkgs.legacyPackages.${system};
         zephyr = inputs.zephyr-nix.packages.${system};
+        # ZMK Studio compiles its protobuf messages with nanopb, whose protoc
+        # wrapper runs on grpcio-tools.
+        pythonEnv = zephyr.pythonEnv.override {
+          extraPackages = ps: [ps.grpcio-tools ps.protobuf];
+        };
         keymap-drawer = pkgs.python3Packages.callPackage ./nix/keymap-drawer.nix {};
         pin-west = pkgs.python3Packages.callPackage "${inputs.pin-west}/package.nix" {};
         dts-format = pkgs.callPackage ./nix/dts-format.nix {
@@ -38,7 +43,7 @@
         default = pkgs.mkShellNoCC {
           packages =
             [
-              zephyr.pythonEnv
+              pythonEnv
               (zephyr.sdk-0_16.override {targets = ["arm-zephyr-eabi"];})
 
               pkgs.cmake
@@ -64,7 +69,7 @@
             ];
 
           env = {
-            PYTHONPATH = "${zephyr.pythonEnv}/${zephyr.pythonEnv.sitePackages}";
+            PYTHONPATH = "${pythonEnv}/${pythonEnv.sitePackages}";
           };
 
           shellHook = ''
