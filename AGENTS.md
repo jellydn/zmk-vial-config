@@ -81,7 +81,7 @@ key labels define `LN0`.
 | Change                            | File                                                     |
 | --------------------------------- | -------------------------------------------------------- |
 | Layers, HRMs, thumb keys          | `config/base.keymap`                                     |
-| HRM timing                        | `config/base.keymap` (`MAKE_HRM`: `tapping-term-ms`, `quick-tap-ms`) |
+| HRM timing                        | `config/base.keymap` (`MAKE_HRM`: `tapping-term-ms`, `quick-tap-ms` 0; thumbs: `QUICK_TAP_MS`). Vial: QSID 7 / 25 in both `.vil` |
 | Combos                            | `config/combos.dtsi` (position diagram at the top)       |
 | Leader sequences                  | `config/leader.dtsi`                                     |
 | Per-board keys, physical mapping  | `config/<board>.keymap`                                  |

@@ -83,7 +83,8 @@ workflows use `if-no-files-found: error` and a 20-minute timeout.
 ## Cross-Cutting Concerns
 
 **Layout parity:** ZMK and both `.vil` must stay in sync by hand.
-**Tap-hold tuning:** documented in README "Home-row mods" and FAQ; ZMK 280 ms, Vial 200 ms.
+**Tap-hold tuning:** documented in README "Home-row mods" and FAQ; every build: 200 ms term, quick tap 0
+on the home-row mods (ZMK thumbs keep 200 ms; Vial QSID 25 is global, so 0 for all keys).
 **Vial EEPROM reset:** every new Vial build wipes Vial settings; user must load the `.vil`.
 
 ---

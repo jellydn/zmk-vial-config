@@ -21,7 +21,9 @@
 
 /* Global defaults */
 
-#define QUICK_TAP_MS 200 // Vial quick tap term
+// Thumb layer-taps only: tap Bksp/Space, then hold, repeats the key. The
+// home-row mods use 0 (off) instead, so tap-then-hold gives the mod, not "aaa".
+#define QUICK_TAP_MS 200
 
 // One-shot mods and layers stay active for 5 s, like Vial's one-shot timeout.
 &sk {
@@ -56,7 +58,7 @@
 
 #define MAKE_HRM(NAME, HOLD, TAP, TRIGGER_POS)                                 \
   ZMK_HOLD_TAP(NAME, bindings = <HOLD>, <TAP>; flavor = "balanced";            \
-               tapping-term-ms = <200>; quick-tap-ms = <QUICK_TAP_MS>;         \
+               tapping-term-ms = <200>; quick-tap-ms = <0>;                    \
                hold-trigger-on-release;                                        \
                hold-trigger-key-positions = <TRIGGER_POS>;)
 
