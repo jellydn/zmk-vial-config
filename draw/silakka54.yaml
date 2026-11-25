@@ -154,10 +154,10 @@ layers:
   - All
   - {t: Fn, h: one-shot}
   - Esc
-  - Scroll ←
-  - Scroll ↓
-  - Scroll ↑
-  - Scroll →
+  - '&scrl SCRL_LEFT'
+  - '&scrl SCRL_DOWN'
+  - '&scrl SCRL_UP'
+  - '&scrl SCRL_RIGHT'
   - ''
   - ''
   - ''
