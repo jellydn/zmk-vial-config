@@ -100,10 +100,33 @@ SHIFT_MORPH(gr_fslh,  &kp FSLH,  &kp LT)    // / <
 #define MS_D &mmv MOVE_DOWN
 #define MS_L &mmv MOVE_LEFT
 #define MS_R &mmv MOVE_RIGHT
-#define WH_U &msc SCRL_UP
-#define WH_D &msc SCRL_DOWN
-#define WH_L &msc SCRL_LEFT
-#define WH_R &msc SCRL_RIGHT
+// &msc ramps up from speed 0, so its first wheel step comes ~250 ms after the
+// press and a quick tap scrolled nothing. QMK sends one step at once. &scrl
+// does the same: &msc_step (full speed, 100 units/s x 10 ms = 1 step per tick)
+// is held for 15 ms, which gives exactly one step, then &msc ramps while held.
+ZMK_BEHAVIOR(msc_step, input_two_axis,
+             x-input-code = <INPUT_REL_HWHEEL>; y-input-code = <INPUT_REL_WHEEL>;
+             trigger-period-ms = <10>; time-to-max-speed-ms = <0>;
+             acceleration-exponent = <0>;)
+
+/ {
+  msc_step_input_listener {
+    compatible = "zmk,input-listener";
+    device = <&msc_step>;
+  };
+};
+
+ZMK_MACRO_ONE_PARAM(scrl, wait-ms = <15>;
+  bindings = <&macro_param_1to1>, <&macro_press &msc_step MACRO_PLACEHOLDER>,
+             <&macro_param_1to1>, <&macro_release &msc_step MACRO_PLACEHOLDER>,
+             <&macro_param_1to1>, <&macro_press &msc MACRO_PLACEHOLDER>,
+             <&macro_pause_for_release>,
+             <&macro_param_1to1>, <&macro_release &msc MACRO_PLACEHOLDER>;)
+
+#define WH_U &scrl SCRL_UP
+#define WH_D &scrl SCRL_DOWN
+#define WH_L &scrl SCRL_LEFT
+#define WH_R &scrl SCRL_RIGHT
 
 /* Keymap */
 

@@ -49,7 +49,8 @@ plus our `.vil`: [Corne v4.1](#corne-v41-qmkvial) and [Silakka54 Vial](#silakka5
   `Leader`: the right one is on Nav (outer bottom-right key), the left one on Sym and Num (outer
   bottom-left key). See [How to flash](#silakka54-zmk).
 - **Mouse keys** match the Vial mouse key settings (linear ramp to 4000 px/s in 600 ms; wheel to
-  100 steps/s in 3.2 s).
+  100 steps/s in 3.2 s). As in QMK, a wheel key sends one step at once, so a quick tap scrolls one
+  step (ZMK's own ramp sends nothing for the first ~250 ms).
 
 ## Home-row mods
 
@@ -259,7 +260,7 @@ Hardware tests are done by hand; CI only checks that each firmware builds. Statu
 
 | Build | Firmware file | Current settings | Tested on hardware | Untested |
 | --- | --- | --- | --- | --- |
-| Silakka54 ZMK | `silakka54-zmk-left.uf2`, `silakka54-zmk-right.uf2` (release) | Home-row mods: 200 ms, `balanced`, other-hand hold-trigger on release, quick tap 0 (thumbs 200 ms), no `require-prior-idle-ms` (PR #18). Combos: 50 ms, 150 ms idle. Leader `B O O T` / `R E S E T` (PR #4) | 2026-11-22, firmware with urob's 280 ms term and 150 ms idle rule (before PR #18): it types, and home-row Shift waits after a letter (the reason for PR #18). 2026-11-24, ZMK Studio build (PR #25): Studio connects over USB to the left half, `Tab` + outer bottom-left key unlocks it, a key edited in Studio works, and Restore Stock Settings brings back the `base.keymap` key | Everything with the PR #18 settings. The Leader key (PR #4 left its hardware checks open). |
+| Silakka54 ZMK | `silakka54-zmk-left.uf2`, `silakka54-zmk-right.uf2` (release) | Home-row mods: 200 ms, `balanced`, other-hand hold-trigger on release, quick tap 0 (thumbs 200 ms), no `require-prior-idle-ms` (PR #18). Scroll: one step at once, then the 3.2 s ramp. Combos: 50 ms, 150 ms idle. Leader `B O O T` / `R E S E T` (PR #4) | 2026-11-22, firmware with urob's 280 ms term and 150 ms idle rule (before PR #18): it types, and home-row Shift waits after a letter (the reason for PR #18). 2026-11-24, ZMK Studio build (PR #25): Studio connects over USB to the left half, `Tab` + outer bottom-left key unlocks it, a key edited in Studio works, and Restore Stock Settings brings back the `base.keymap` key | Everything with the PR #18 settings. The Leader key (PR #4 left its hardware checks open). |
 | Silakka54 Vial | Squalius-cephalus' v1.4led [`silakka54_vial_led_LEFT.uf2`](https://github.com/Squalius-cephalus/silakka54/releases/download/v1.4led/silakka54_vial_led_LEFT.uf2) (left half) and [`silakka54_vial_led_RIGHT.uf2`](https://github.com/Squalius-cephalus/silakka54/releases/download/v1.4led/silakka54_vial_led_RIGHT.uf2) (right half) + `silakka54-graphite.vil` | 200 ms, Permissive Hold, Chordal Hold, Flow Tap off, quick tap 0; combos 50 ms on every layer | Nothing | Everything, also flashing and both halves working |
 | Corne v4.1 | foostan's [`crkbd_rev4_1_standard_vial.uf2`](https://github.com/foostan/kbd_firmware/raw/7e94242f7474761609d7ec16df0872a9785c2ccb/keyboards/crkbd/vial-kb/vial-qmk/.build/crkbd_rev4_1_standard_vial.uf2) + `corne-v4.1-graphite.vil` | The same QMK Settings as the Silakka54 Vial `.vil`; the same as the dotfiles `.vil` except quick tap 0 (not 200); combos on every layer; thumbs count as their own hand | Only the old custom firmware (2026-11-21, from `main`, Flow Tap 150 ms): `Space` for Nav after typing, combos, Graphite shift overrides and M0 worked. Later its home-row Shift waited after a letter (fixed by Flow Tap off, PR #16) | Everything on the stock firmware (PR #21) |
 
@@ -273,15 +274,17 @@ Hardware tests are done by hand; CI only checks that each firmware builds. Statu
    mods.
 4. **Thumb layers:** hold `Space` and use Nav arrows (right hand); hold `Bksp` / `Enter` for Num /
    Sym. On Vial, for a Nav key on the left hand, hold `Space` for 200 ms first.
-5. **Combos:** `B`+`L` → Esc, `L`+`W` → Enter, `F`+`U` → Esc, `O`+`U` → `'`, `X`+`M` → Cmd+C.
-6. **Graphite shift overrides:** Shift+`'` → `_`, Shift+`,` → `?`, Shift+`/` → `<`, Shift+`-` → `"`.
-7. **Leader (ZMK only):** left half: hold `Bksp`, tap the outer bottom-left key, type `B O O T` →
+5. **Scroll (Mouse layer):** hold `Tab`, then tap each wheel key on the right bottom row (`WH_L`,
+   `WH_D`, `WH_U`, `WH_R`) → one step each, in that direction. Hold one for 2 s → it scrolls faster.
+6. **Combos:** `B`+`L` → Esc, `L`+`W` → Enter, `F`+`U` → Esc, `O`+`U` → `'`, `X`+`M` → Cmd+C.
+7. **Graphite shift overrides:** Shift+`'` → `_`, Shift+`,` → `?`, Shift+`/` → `<`, Shift+`-` → `"`.
+8. **Leader (ZMK only):** left half: hold `Bksp`, tap the outer bottom-left key, type `B O O T` →
    `RPI-RP2` drive. Right half (USB in the right half): hold `Space`, tap the outer bottom-right key,
    type `B O O T`. `R E S E T` restarts the half.
-8. **ZMK Studio (Silakka54 ZMK only):** with USB in the left half, connect at <https://zmk.studio/>,
+9. **ZMK Studio (Silakka54 ZMK only):** with USB in the left half, connect at <https://zmk.studio/>,
    unlock with `Tab` + the outer bottom-left key, change one key, test it, then click **Restore Stock
    Settings** and check that the key is back.
-9. **Removed keys (Corne):** Nav has no Fn key on the left inner home-row key, Mouse has no Caps Lock, and the
+10. **Removed keys (Corne):** Nav has no Fn key on the left inner home-row key, Mouse has no Caps Lock, and the
    Sym/Num right thumbs do nothing.
 
 ## Build
